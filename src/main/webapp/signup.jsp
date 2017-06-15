@@ -10,14 +10,14 @@
 <head>
 <meta charset="UTF-8">
 <title>SIGN UP Template</title>
-<link rel="stylesheet" href="<%=basePath %>static/css/bootstrap.min.css" />
-<link rel="stylesheet" href="<%=basePath %>static/css/bootstrapValidator.min.css" />
-<link rel="stylesheet" href="<%=basePath %>static/css/bootstrap-datetimepicker.min.css" />
-<script src="<%=basePath %>static/js/jquery-1.10.2.min.js"></script>
-<script src="<%=basePath %>static/js/bootstrap.min.js"></script>
-<script src="<%=basePath %>static/js/bootstrapValidator.min.js"></script>
-<script src="<%=basePath %>static/js/moment.min.js"></script>
-<script src="<%=basePath %>static/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap.min.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/css/bootstrapValidator.min.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap-datetimepicker.min.css" />
+<script src="<%=basePath %>resources/js/jquery-1.10.2.min.js"></script>
+<script src="<%=basePath %>resources/js/bootstrap.min.js"></script>
+<script src="<%=basePath %>resources/js/bootstrapValidator.min.js"></script>
+<script src="<%=basePath %>resources/js/moment.min.js"></script>
+<script src="<%=basePath %>resources/js/bootstrap-datetimepicker.min.js"></script>
 <!-- Override feedback icon position -->
 <style type="text/css">
 

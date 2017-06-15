@@ -10,11 +10,11 @@
 <head>
 <meta charset="UTF-8">
 <title>LOGIN Template</title>
-<link rel="stylesheet" href="<%=basePath %>static/css/bootstrap.min.css" />
-<link rel="stylesheet" href="<%=basePath %>static/css/bootstrapValidator.min.css" />
-<script src="<%=basePath %>static/js/jquery-3.1.1.min.js"></script>
-<script src="<%=basePath %>static/js/bootstrap.min.js"></script>
-<script src="<%=basePath %>static/js/bootstrapValidator.min.js"></script>
+<link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap.min.css" />
+<link rel="stylesheet" href="<%=basePath %>resources/css/bootstrapValidator.min.css" />
+<script src="<%=basePath %>resources/js/jquery-3.1.1.min.js"></script>
+<script src="<%=basePath %>resources/js/bootstrap.min.js"></script>
+<script src="<%=basePath %>resources/js/bootstrapValidator.min.js"></script>
 <style>
 </style>
 </head>
