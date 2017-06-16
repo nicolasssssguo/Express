@@ -1,14 +1,10 @@
 package com.nicolasguo.webtemplate.dao.impl;
 
 import java.util.List;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-
 import com.nicolasguo.webtemplate.condition.HibernateCondition;
 import com.nicolasguo.webtemplate.dao.IBaseEntityDao;
 
@@ -51,8 +47,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 
 	@Override
 	public void deleteEntitys(List<T> list) {
-		sessionFactory.getCurrentSession().delete
-		getHibernateTemplate().deleteAll(list);
+		list.forEach(sessionFactory.getCurrentSession()::delete);
 	}
 
 	public void save(T entity) {
@@ -74,13 +69,15 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<T> findByCondition(HibernateCondition condition) {
-		return sessionFactory.getCurrentSession().createQuery(condition.getCriteria().)
-		return getHibernateTemplate().findByCriteria(condition.getCriteria());
+		return condition.getCriteria()
+				.getExecutableCriteria(sessionFactory.getCurrentSession())
+				.list();
 	}
 	
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List findByCriteria(DetachedCriteria criteria){
-		return getHibernateTemplate().findByCriteria(criteria);
+		return criteria.getExecutableCriteria(sessionFactory.getCurrentSession())
+				.list();
 	}
 }
