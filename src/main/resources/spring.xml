@@ -14,39 +14,36 @@
             http://www.springframework.org/schema/tx   
             http://www.springframework.org/schema/tx/spring-tx-3.0.xsd ">
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
 	<context:annotation-config />
 	<context:component-scan base-package="com.nicolasguo" />
-	<context:property-placeholder location="classpath:/sqlite.properties" />
+	<context:property-placeholder location="classpath:/hibernate.properties" />
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${jdbc.driverClassName}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
 	</bean>
-	
+
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 配置数据源 -->
 		<property name="dataSource" ref="dataSource"></property>
+		<property name="packagesToScan" value="com.nicolasguo.webtemplate.entity"></property>
 		<property name="hibernateProperties">
 			<props>
+				<!-- 数据库的方言 -->
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.cache.use_query_cache">true</prop>
-				<prop key="hibernate.cache.use_second_level_cache">true</prop>
-				<prop key="hibernate.query.substitutions">true 1,false 0</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.ejb.naming_strategy">${hibernate.ejb.naming_strategy}</prop>
 			</props>
 		</property>
-		<property name="packagesToScan">
-			<list>
-				<value>com.nicolasguo.webtemplate.entity</value>
-			</list>
-		</property>
 	</bean>
-	
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory"></property>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 </beans>
