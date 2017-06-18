@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:b="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+	<!-- 不要过滤图片等静态资源，其中**代表可以跨越目录，*不可以跨越目录。 -->
+	<http pattern="/resources/**/*.jpg" security="none"></http>
+	<http pattern="/resources/**/*.png" security="none"></http>
+	<http pattern="/resources/**/*.gif" security="none"></http>
+	<http pattern="/resources/**/*.swf" security="none"></http>
+	<http pattern="/resources/**/*.css" security="none"></http>
+	<http pattern="/resources/**/*.js" security="none"></http>
+
+	<http pattern="/login.jsp" security="none"></http>
+
+	<http use-expressions="true" auto-config="true">
+		<csrf disabled="true"/>
+		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+		<form-login login-page="/login.jsp"
+			login-processing-url="/login.action"
+			username-parameter="username"
+			password-parameter="password"
+			authentication-failure-url="/login.jsp" default-target-url="/main.jsp" />
+		<logout logout-success-url="/login.jsp" delete-cookies="JSESSIONID" />
+		<remember-me />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="userDetailsService">
+			<password-encoder ref="bcryptEncoder" />
+		</authentication-provider>
+	</authentication-manager>
+
+</b:beans>

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrapValidator.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap-datetimepicker.min.css" />
-<script src="<%=basePath %>resources/js/jquery-1.10.2.min.js"></script>
+<script src="<%=basePath %>resources/js/jquery-1.12.4.min.js"></script>
 <script src="<%=basePath %>resources/js/bootstrap.min.js"></script>
 <script src="<%=basePath %>resources/js/bootstrapValidator.min.js"></script>
 <script src="<%=basePath %>resources/js/moment.min.js"></script>

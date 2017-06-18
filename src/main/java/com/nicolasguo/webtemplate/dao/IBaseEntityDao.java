@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 
 import com.nicolasguo.webtemplate.condition.HibernateCondition;
+import com.nicolasguo.webtemplate.entity.Page;
 
 
 /**
@@ -30,11 +31,18 @@ public interface IBaseEntityDao<T> {
 	public void delete(T entity);
 	
 	public void deleteEntitys(List<T> list);
+	
+	public long count();
 
 	public List<T> findAll();
+	
+	public Page<T> findAll(Page<T> page);
 
 	@SuppressWarnings("rawtypes")
 	public List<T> findByCondition(HibernateCondition condition);
+	
+	@SuppressWarnings("rawtypes")
+	public Page<T> findByCondition(HibernateCondition condition, Page<T> page);
 	
 	@SuppressWarnings("rawtypes")
 	public List findByCriteria(DetachedCriteria criteria);

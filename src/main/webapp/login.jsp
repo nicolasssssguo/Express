@@ -12,7 +12,7 @@
 <title>LOGIN Template</title>
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrapValidator.min.css" />
-<script src="<%=basePath %>resources/js/jquery-3.1.1.min.js"></script>
+<script src="<%=basePath %>resources/js/jquery-1.12.4.min.js"></script>
 <script src="<%=basePath %>resources/js/bootstrap.min.js"></script>
 <script src="<%=basePath %>resources/js/bootstrapValidator.min.js"></script>
 <style>
@@ -28,7 +28,7 @@
 					</div><!-- end of panel-heading -->
 					<hr />
 					<div class="panel-body">
-						<form role="form" id="loginForm">
+						<form role="form" id="loginForm" action="${pageContext.request.contextPath}/j_spring_security_check" method="POST">
 							<!-- username field -->
 							<div class="form-group">
 								<label for="username">UserName:</label>

@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.icloud.entity.Role;
-import com.icloud.service.RoleService;
+import com.nicolasguo.webtemplate.entity.Role;
+import com.nicolasguo.webtemplate.service.RoleService;
+
 
 public class RoleServiceImpl implements RoleService<Role, String> {
 	
