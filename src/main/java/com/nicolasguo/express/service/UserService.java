@@ -3,11 +3,9 @@ package com.nicolasguo.express.service;
 import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-
 import com.nicolasguo.express.condition.impl.UserCondition;
 
-public interface UserService<T, PK extends Serializable> extends UserDetailsService {
+public interface UserService<T, PK extends Serializable> {
 
 	public T getUser(PK id);
 

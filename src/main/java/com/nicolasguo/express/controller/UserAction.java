@@ -13,7 +13,8 @@ public class UserAction {
             @RequestParam(value = "error", required = false) String error){
 		if (error != null) {  
             model.addAttribute("error", "用户名或密码错误");  
-        }  
+        }
+		System.out.println("login");
         return "login"; 
 	}
 
