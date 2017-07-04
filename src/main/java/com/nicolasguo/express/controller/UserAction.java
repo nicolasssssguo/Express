@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.controller;
+package com.nicolasguo.express.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

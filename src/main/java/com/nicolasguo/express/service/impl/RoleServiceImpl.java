@@ -1,11 +1,11 @@
-package com.nicolasguo.webtemplate.service.impl;
+package com.nicolasguo.express.service.impl;
 
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nicolasguo.webtemplate.entity.Role;
-import com.nicolasguo.webtemplate.service.RoleService;
+import com.nicolasguo.express.entity.Role;
+import com.nicolasguo.express.service.RoleService;
 
 
 public class RoleServiceImpl implements RoleService<Role, String> {

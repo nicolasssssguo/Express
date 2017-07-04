@@ -1,11 +1,11 @@
-package com.nicolasguo.webtemplate.service;
+package com.nicolasguo.express.service;
 
 import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.nicolasguo.webtemplate.condition.impl.UserCondition;
+import com.nicolasguo.express.condition.impl.UserCondition;
 
 public interface UserService<T, PK extends Serializable> extends UserDetailsService {
 

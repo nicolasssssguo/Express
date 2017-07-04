@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.entity;
+package com.nicolasguo.express.entity;
 
 import java.io.Serializable;
 import java.util.Date;

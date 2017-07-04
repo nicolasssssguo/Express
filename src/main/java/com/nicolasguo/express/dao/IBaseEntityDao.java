@@ -1,11 +1,11 @@
-package com.nicolasguo.webtemplate.dao;
+package com.nicolasguo.express.dao;
 
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
 
-import com.nicolasguo.webtemplate.condition.HibernateCondition;
-import com.nicolasguo.webtemplate.entity.Page;
+import com.nicolasguo.express.condition.HibernateCondition;
+import com.nicolasguo.express.entity.Page;
 
 
 /**

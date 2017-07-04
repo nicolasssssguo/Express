@@ -1,11 +1,11 @@
-package com.nicolasguo.webtemplate.common;
+package com.nicolasguo.express.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.nicolasguo.webtemplate.dao.IBaseEntityDao;
-import com.nicolasguo.webtemplate.dao.impl.BaseEntityDaoImpl;
-import com.nicolasguo.webtemplate.entity.User;
+import com.nicolasguo.express.dao.IBaseEntityDao;
+import com.nicolasguo.express.dao.impl.BaseEntityDaoImpl;
+import com.nicolasguo.express.entity.User;
 
 @Configuration
 public class ProjectConfig {

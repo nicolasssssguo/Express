@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.service;
+package com.nicolasguo.express.service;
 
 import java.io.Serializable;
 import java.util.List;

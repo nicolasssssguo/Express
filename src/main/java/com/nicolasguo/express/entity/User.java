@@ -1,14 +1,16 @@
-package com.nicolasguo.webtemplate.entity;
+package com.nicolasguo.express.entity;
 
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.nicolasguo.webtemplate.common.ProjectConfig;
+import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
 @Table(name = ProjectConfig.PREFIX + "_user")
@@ -26,6 +28,7 @@ public class User extends BaseEntityObject implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
+	@Column(length=255)
 	public String getLoginName() {
 		return loginName;
 	}
@@ -34,37 +37,45 @@ public class User extends BaseEntityObject implements UserDetails {
 		this.loginName = loginName;
 	}
 
-	@Override
+	@Transient
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
 
-	@Override
+	@Column(length=255)
 	public String getPassword() {
 		return password;
 	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-	@Override
+	@Column(length=255)
 	public String getUsername() {
 		return username;
 	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-	@Override
+	@Transient
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
-	@Override
+	@Transient
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
-	@Override
+	@Transient
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
-	@Override
+	@Transient
 	public boolean isEnabled() {
 		return enabled;
 	}

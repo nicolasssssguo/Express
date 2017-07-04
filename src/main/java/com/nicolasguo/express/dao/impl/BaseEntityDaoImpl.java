@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.dao.impl;
+package com.nicolasguo.express.dao.impl;
 
 import java.util.List;
 import org.hibernate.Session;
@@ -7,9 +7,10 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import com.nicolasguo.webtemplate.condition.HibernateCondition;
-import com.nicolasguo.webtemplate.dao.IBaseEntityDao;
-import com.nicolasguo.webtemplate.entity.Page;
+
+import com.nicolasguo.express.condition.HibernateCondition;
+import com.nicolasguo.express.dao.IBaseEntityDao;
+import com.nicolasguo.express.entity.Page;
 
 
 public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {

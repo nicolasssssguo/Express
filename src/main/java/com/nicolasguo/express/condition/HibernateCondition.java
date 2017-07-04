@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.condition;
+package com.nicolasguo.express.condition;
 
 import java.lang.reflect.ParameterizedType;
 

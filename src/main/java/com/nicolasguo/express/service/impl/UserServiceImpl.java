@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.service.impl;
+package com.nicolasguo.express.service.impl;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.nicolasguo.webtemplate.condition.impl.UserCondition;
-import com.nicolasguo.webtemplate.dao.IBaseEntityDao;
-import com.nicolasguo.webtemplate.entity.User;
-import com.nicolasguo.webtemplate.service.UserService;
+import com.nicolasguo.express.condition.impl.UserCondition;
+import com.nicolasguo.express.dao.IBaseEntityDao;
+import com.nicolasguo.express.entity.User;
+import com.nicolasguo.express.service.UserService;
 
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService<User, String> {

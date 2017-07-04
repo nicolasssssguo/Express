@@ -1,4 +1,4 @@
-package com.nicolasguo.webtemplate.service.impl;
+package com.nicolasguo.express.service.impl;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
