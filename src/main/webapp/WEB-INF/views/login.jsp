@@ -33,9 +33,8 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-default panel-login">
 					<div class="text-center">
-						<h2>快递信息管理系统</h2>
+						<img src="<%=basePath %>resources/images/logo.png" />
 					</div><!-- end of panel-heading -->
-					<hr />
 					<div class="panel-body">
 						<form role="form" id="loginForm" action="${pageContext.request.contextPath}/login.action" method="POST">
 							<!-- username field -->

@@ -10,7 +10,7 @@ import com.nicolasguo.express.entity.User;
 @Configuration
 public class ProjectConfig {
 
-	public static final String PREFIX = "webtemplate";
+	public static final String PREFIX = "express";
 
 	public static final String NAME = PREFIX + ".";
 	

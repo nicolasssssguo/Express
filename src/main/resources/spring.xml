@@ -28,7 +28,7 @@
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<!-- 配置数据源 -->
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="packagesToScan" value="com.nicolasguo.webtemplate.entity"></property>
+		<property name="packagesToScan" value="com.nicolasguo.express.entity"></property>
 		<property name="hibernateProperties">
 			<props>
 				<!-- 数据库的方言 -->
