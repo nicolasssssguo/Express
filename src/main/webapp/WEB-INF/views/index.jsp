@@ -27,13 +27,9 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 					<a class="navbar-brand" href="#">快递管理系统</a>
 				</div>
 				
-				<div class="nav navbar-nav navbar-right">
-					<form class="navbar-form navbar-right" role="search">
-			            <button type="submit" class="btn btn-default">
-			            	<i class="glyphicon glyphicon-off"></i>
-			            </button>
-			        </form>
-				</div>
+				<ul class="nav navbar-nav navbar-right"> 
+		            <li><a href="#"><span class="glyphicon glyphicon-off"></span> 锁定</a></li> 
+		        </ul>
 			</div>
 		</nav>
 	</div>
