@@ -31,11 +31,6 @@ body {
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
-
-.toolbar {
-	margin-top: 5px;
-	margin-bottom: 10px;
-}
 </style>
 </head>
 <body>
@@ -43,13 +38,22 @@ body {
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="#">首页</a>
+					<a class="navbar-brand" href="#">快递管理系统</a>
 				</div>
-
+				<div>
+					<ul class="nav navbar-nav navbar-left">
+				      <li class="nav-item active">
+				        <a class="nav-link" href="${pageContext.request.contextPath}/index">首页 <span class="sr-only">(current)</span></a>
+				      </li>
+				      <li class="nav-item">
+				        <a class="nav-link" href="${pageContext.request.contextPath}/newexpress">录入快递</a>
+				      </li>
+				    </ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#"><span class="glyphicon glyphicon-off"></span>
 							锁定</a></li>
 				</ul>
+				</div>
 			</div>
 		</nav>
 
@@ -112,9 +116,9 @@ body {
 		      </div>
 		      
 		      <div class="text-center">
-		          <button class="btn btn-primary" type="submit">
+		          <button class="btn btn-primary btn-md" type="submit">
 		          <span class="glyphicon glyphicon-search"></span>搜索</button>
-		          <button class="btn btn-default" type="button">
+		          <button class="btn btn-default btn-md" type="button">
 		          <span class="glyphicon glyphicon-refresh"></span>重置</button>
 		      </div>
 		    </form>
