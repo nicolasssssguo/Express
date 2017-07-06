@@ -58,102 +58,100 @@ body {
 				<img src="<%=basePath%>resources/images/logo.png" />
 			</div>
 		</div>
-		<div class="dateoption row text-center">
-			<div class="col-md-4 col-md-offset-8">
-				<div class="btn-group" data-toggle="buttons">
-					<label class="btn btn-info active"> <input type="radio"
-						name="options" id="option1" autocomplete="off" checked>
-						全部
-					</label> <label class="btn btn-info"> <input type="radio"
-						name="options" id="option2" autocomplete="off"> 一周
-					</label> <label class="btn btn-info"> <input type="radio"
-						name="options" id="option3" autocomplete="off"> 今日
-					</label> <label class="btn btn-info"> <input type="radio"
-						name="options" id="option3" autocomplete="off"> 自定义
-					</label>
-				</div>
-			</div>
-		</div>
-		<div id="datepicker" class="datepicker row">
-			<div class="col-md-4 col-md-offset-8">
-				<div class="input-daterange input-group" id="datepicker">
-				    <input type="text" class="input-sm form-control" name="start" />
-				    <span class="input-group-addon">到</span>
-				    <input type="text" class="input-sm form-control" name="end" />
-				</div>
-			</div>
-		</div>
-		<div class="row toolbar">
-			<div class="col-md-4">
-				<button type="button" class="btn btn-default btn-sm">
-					<span class="glyphicon glyphicon-plus"></span>录入
-				</button>
-			</div>
-			<div class="col-md-4 col-md-offset-4">
-				<div class="input-group">
-					<div class="input-group-btn">
-						<button type="button" class="btn btn-default dropdown-toggle"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							手机号码<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li><a href="#">手机号码</a></li>
-							<li><a href="#">姓名</a></li>
-						</ul>
-					</div>
-					<!-- /btn-group -->
-					<input type="text" class="form-control" aria-label="...">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button">
-							<span class="glyphicon glyphicon-search"></span>
-						</button>
-					</span>
-				</div>
-				<!-- /input-group -->
-			</div>
-		</div>
+		
+		<div class="panel panel-primary">
+		  <div class="panel-heading">搜索</div>
+		  <div class="panel-body">
+		    <form id="searchForm" role="form" class="form-horizontal" action="${pageContext.request.contextPath}/search_express.action" method="POST">
+		      <div class="row">
+		          <div class="form-group col-md-6">
+	                  <label class="col-sm-3 control-label">时间范围：</label>
+	                  <div class="input-daterange input-group col-sm-9" id="datepicker">
+	                      <input type="text" class="input-sm form-control" name="start" />
+	                      <span class="input-group-addon">到</span>
+	                      <input type="text" class="input-sm form-control" name="end" />
+	                  </div>
+	              </div>
+	              
+	              <div class="form-group col-md-6">
+                      <label class="col-sm-3 control-label">状态：</label>
+                      <label class="checkbox-inline">
+                        <input type="radio" name="express_status" id="optionsRadios3" value="option1" checked>全部
+                      </label>
+                      <label class="checkbox-inline">
+					    <input type="radio" name="express_status" id="optionsRadios3" value="option1">已签收
+					  </label>
+					  <label class="checkbox-inline">
+                        <input type="radio" name="express_status" id="optionsRadios3" value="option1">未签收
+                      </label>
+                  </div>
+		      </div>
+		      
+		      <div class="row">
+		          <div class="form-group col-md-6">
+		              <label class="col-sm-3 control-label">地址：</label>
+		              <div class="col-sm-9">
+		                  <select class="form-control"> 
+	                        <option>全部</option>
+	                        <option value="fujian">西良村</option>
+	                        <option value="fujian">下楼村</option>
+	                        <option value="fujian">世甲村</option>
+	                        <option value="fujian">溪墘村</option>
+	                        <option value="fujian">锦田村</option>
+	                        <option value="fujian">南书村</option>
+	                      </select>
+		              </div>
+                  </div>
+                  
+                  <div class="form-group col-md-6">
+                      <label class="col-sm-3 control-label">手机号码：</label>
+                      <div class="col-sm-9">
+                        <input class="form-control" type="text" name="phone_number" />
+                      </div>
+                  </div>
+		      </div>
+		      
+		      <div class="text-center">
+		          <button class="btn btn-primary" type="submit">
+		          <span class="glyphicon glyphicon-search"></span>搜索</button>
+		          <button class="btn btn-default" type="button">
+		          <span class="glyphicon glyphicon-refresh"></span>重置</button>
+		      </div>
+		    </form>
+		  </div>
+        </div>
+		
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-bordered table-striped">
 					<thead>
 						<tr>
 							<th>序号</th>
-							<th>地址</th>
 							<th>姓名</th>
+							<th>地址</th>
 							<th>电话</th>
+							<th>状态</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@TwBootstrap</td>
-						</tr>
-						<tr>
-							<th scope="row">3</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
-						<tr>
-							<th scope="row">4</th>
-							<td colspan="2">Larry the Bird</td>
-							<td>@twitter</td>
+							<td>地址</td>
+							<td>姓名</td>
+							<td>电话</td>
+							<td>状态</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
+	
+	<div class="row footer">
+	   
+	</div>
 	<script>
-	$('#datepicker .input-daterange').datepicker({
+	$('#searchForm .input-daterange').datepicker({
 		format: 'yyyy年mm月dd日',
 		language: 'zh-CN'
 	});
