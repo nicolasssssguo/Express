@@ -1,6 +1,9 @@
 package com.nicolasguo.express.dao.impl;
 
 import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
@@ -11,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.nicolasguo.express.condition.HibernateCondition;
 import com.nicolasguo.express.dao.IBaseEntityDao;
 import com.nicolasguo.express.entity.Page;
-
 
 public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 
@@ -26,7 +28,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	}
 	
 	public Session currentSession(){
-		return sessionFactory.getCurrentSession();
+		return sessionFactory.openSession();
 	}
 	
 	@Override
@@ -41,7 +43,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> findByProperty(String propertyName, String propertyValue) {
+	public List<T> findByProperty(String propertyName, Object propertyValue) {
 		String queryString = "from " + this.entityClass.getSimpleName() + " t where t." + propertyName + " = :" + propertyName;
 		return currentSession().createQuery(queryString)
 				.setParameter(propertyName, propertyValue)

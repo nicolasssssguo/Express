@@ -2,15 +2,17 @@ package com.nicolasguo.express.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
-@Table(name = ProjectConfig.PREFIX + "_area")
-public class Area extends BaseEntityObject {
+@Table(name = "tb_area")
+public class Area {
 
 	private String code;
 
@@ -18,9 +20,11 @@ public class Area extends BaseEntityObject {
 
 	private int level;
 
+	@JsonIgnore
 	private Area parent;
 
-	@Column(nullable = false, length = 128)
+	@Id
+	@Column(length = 64)
 	public String getCode() {
 		return code;
 	}
@@ -47,7 +51,8 @@ public class Area extends BaseEntityObject {
 		this.level = level;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
+	@JoinColumn(name="pcode", nullable=true)
 	public Area getParent() {
 		return parent;
 	}

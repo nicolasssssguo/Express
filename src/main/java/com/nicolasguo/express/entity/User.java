@@ -8,7 +8,7 @@ import javax.persistence.Transient;
 import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
-@Table(name = ProjectConfig.PREFIX + "_user")
+@Table(name = "tb_user")
 public class User extends BaseEntityObject {
 
 	private static final long serialVersionUID = -9038525706596164283L;

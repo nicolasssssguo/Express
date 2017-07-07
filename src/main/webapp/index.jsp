@@ -94,14 +94,8 @@ body {
 							</div>
 
 							<div class="form-group">
-								<label>地址：</label> <select class="form-control">
+								<label>地址：</label> <select class="form-control area">
 									<option>全部</option>
-									<option value="fujian">西良村</option>
-									<option value="fujian">下楼村</option>
-									<option value="fujian">世甲村</option>
-									<option value="fujian">溪墘村</option>
-									<option value="fujian">锦田村</option>
-									<option value="fujian">南书村</option>
 								</select>
 							</div>
 
@@ -138,14 +132,8 @@ body {
 							</div>
 
 							<div class="form-group">
-								<label>地址：</label> <select class="form-control">
+								<label>地址：</label> <select class="form-control area">
 									<option>全部</option>
-									<option value="fujian">西良村</option>
-									<option value="fujian">下楼村</option>
-									<option value="fujian">世甲村</option>
-									<option value="fujian">溪墘村</option>
-									<option value="fujian">锦田村</option>
-									<option value="fujian">南书村</option>
 								</select>
 							</div>
 
@@ -226,6 +214,19 @@ body {
 							source : source,
 							items : 8
 						});
+						
+						$.ajax({  
+			                   type: "POST",  
+			                   url: "arealist.action",  
+			                   data: {},  
+			                   success:function(data){  
+			                       for(i in data){
+			                    	   var area = data[i];
+			                    	   $('#searchForm select.area').append('<option value="'+area.code+'">'+area.name+'</option>');
+			                    	   $('#newexpForm select.area').append('<option value="'+area.code+'">'+area.name+'</option>')
+			                       }
+			                   }  
+			            });
 					});
 		</script>
 </body>

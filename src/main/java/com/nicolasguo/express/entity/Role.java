@@ -7,7 +7,7 @@ import javax.persistence.Transient;
 import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
-@Table(name = ProjectConfig.PREFIX + "_role")
+@Table(name = "tb_role")
 public class Role extends BaseEntityObject {
 
 	private static final long serialVersionUID = 635469332843374297L;

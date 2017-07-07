@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.nicolasguo.express.dao.IBaseEntityDao;
 import com.nicolasguo.express.dao.impl.BaseEntityDaoImpl;
+import com.nicolasguo.express.entity.Area;
 import com.nicolasguo.express.entity.User;
 
 @Configuration
@@ -15,8 +16,13 @@ public class ProjectConfig {
 	public static final String NAME = PREFIX + ".";
 	
 	@Bean(name = "userDao")
-	public IBaseEntityDao<User> generateAccountDao(){
+	public IBaseEntityDao<User> generateUserDao(){
 		return new BaseEntityDaoImpl<User>(User.class);
+	}
+	
+	@Bean(name = "areaDao")
+	public IBaseEntityDao<Area> generateAreaDao(){
+		return new BaseEntityDaoImpl<Area>(Area.class);
 	}
 
 }

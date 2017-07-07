@@ -22,7 +22,7 @@ public interface IBaseEntityDao<T> {
 	
 	public T get(String id);
 	
-	public List<T> findByProperty(String propertyName, String propertyValue);
+	public List<T> findByProperty(String propertyName, Object propertyValue);
 
 	public void update(T entity);
 

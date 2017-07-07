@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
-@Table(name = ProjectConfig.PREFIX + "_express")
+@Table(name = "tb_express")
 public class Express extends BaseEntityObject {
 
 	private Customer sender;

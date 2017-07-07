@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
-@Table(name = ProjectConfig.PREFIX + "_customer")
+@Table(name = "tb_customer")
 public class Customer extends BaseEntityObject {
 
 	private String name;
