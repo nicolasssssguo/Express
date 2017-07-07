@@ -64,16 +64,17 @@ body {
 		</nav>
 
 		<div class="row">
-			<div class="col-md-6">
-				<div class="panel panel-primary">
-					<div class="panel-heading">搜索</div>
-					<div class="panel-body">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">快递管理</div>
+				<div class="panel-body">
+					<div class="col-md-6">
 						<form id="searchForm" role="form"
 							action="${pageContext.request.contextPath}/search_express.action"
 							method="POST">
 							<div class="form-group">
 								<label>时间范围：</label>
-								<div class="input-daterange input-group col-sm-7"
+								<div class="input-daterange input-group"
 									id="datepicker">
 									<input type="text" class="input-sm form-control" name="start" />
 									<span class="input-group-addon">到</span> <input type="text"
@@ -111,24 +112,19 @@ body {
 
 							<div class="form-group">
 								<button class="btn btn-lg btn-primary btn-block" type="submit">
-									<span class="glyphicon glyphicon-search"></span>搜索
+									<span class="glyphicon glyphicon-search"></span> 搜索
 								</button>
 							</div>
 
 							<div class="form-group">
 								<button class="btn btn-lg btn-primary btn-block" type="button">
-									<span class="glyphicon glyphicon-refresh"></span>重置
+									<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+									重置
 								</button>
 							</div>
 						</form>
 					</div>
-				</div>
-			</div>
-
-			<div class="col-md-6">
-				<div class="panel panel-primary">
-					<div class="panel-heading">录入快递</div>
-					<div class="panel-body">
+					<div class="col-md-6">
 						<form id="newexpForm" role="form"
 							action="${pageContext.request.contextPath}/search_express.action"
 							method="POST">
@@ -166,56 +162,71 @@ body {
 
 							<div class="form-group">
 								<button class="btn btn-lg btn-primary btn-block" type="submit">
-									<span class="glyphicon glyphicon-plus"></span>录入
+									<span class="glyphicon glyphicon-plus"></span> 录入
 								</button>
 							</div>
 						</form>
 					</div>
+
+				</div>
+
+			</div>
+
+
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>姓名</th>
+								<th>地址</th>
+								<th>电话</th>
+								<th>状态</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">1</th>
+								<td>地址</td>
+								<td>姓名</td>
+								<td>电话</td>
+								<td>状态</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 
-
-		<div class="row">
-			<div class="col-md-12">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>序号</th>
-							<th>姓名</th>
-							<th>地址</th>
-							<th>电话</th>
-							<th>状态</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td>地址</td>
-							<td>姓名</td>
-							<td>电话</td>
-							<td>状态</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-
-	<div class="row footer"></div>
-	<script>
-		$('#newexpForm .input-group.date').datepicker({
-			todayBtn : "linked",
-			todayHighlight : true,
-			autoclose : true,
-			format : 'yyyy年mm月dd日',
-			language : 'zh-CN'
-		});
-		$('#newexpForm .input-group.date').datepicker('update', new Date());
-		$('#searchForm .input-daterange').datepicker({
-			format : 'yyyy年mm月dd日',
-			language : 'zh-CN'
-		});
-	</script>
+		<div class="row footer"></div>
+		<script>
+			$(document).ready(
+					function() {
+						$('#newexpForm .input-group.date').datepicker({
+							todayBtn : "linked",
+							todayHighlight : true,
+							autoclose : true,
+							format : 'yyyy年mm月dd日',
+							language : 'zh-CN'
+						});
+						$('#newexpForm .input-group.date').datepicker('update',
+								new Date());
+						$('#searchForm .input-daterange').datepicker({
+							todayBtn : "linked",
+                            todayHighlight : true,
+                            autoclose : true,
+							format : 'yyyy年mm月dd日',
+							language : 'zh-CN'
+						});
+						var source = [ '18759618858' ];
+						$("#phone_number").typeahead({
+							source : source,
+							items : 8
+						});
+					});
+		</script>
 </body>
 </html>
