@@ -22,6 +22,7 @@
 <script src="<%=basePath%>resources/js/bootstrap-datepicker.min.js"></script>
 <script
 	src="<%=basePath%>resources/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="<%=basePath%>resources/js/bootstrap-typeahead.min.js"></script>
 <style>
 body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 	font-family: Microsoft YaHei, '宋体', Tahoma, Helvetica, Arial,
@@ -99,15 +100,24 @@ body {
 						<div class="form-group col-md-6">
 							<label class="col-sm-3 control-label">姓名：</label>
 							<div class="col-sm-9">
-								<input class="form-control" type="text" name="phone_number" />
+								<input class="form-control" type="text" name="customer_name" />
 							</div>
 						</div>
 
 						<div class="form-group col-md-6">
 							<label class="col-sm-3 control-label">手机号码：</label>
 							<div class="col-sm-9">
-								<input class="form-control" type="text" name="phone_number" />
+								<input id="phone_number" class="form-control" type="text"
+									name="phone_number" data-provide="typeahead" autocomplete="off" />
 							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-2 col-md-offset-5">
+							<button class="btn btn-primary btn-block" type="submit">
+								<span class="glyphicon glyphicon-plus"></span>录入
+							</button>
 						</div>
 					</div>
 				</form>
@@ -118,14 +128,27 @@ body {
 
 	<div class="row footer"></div>
 	<script>
-		$('#newexpForm .input-group.date').datepicker({
-			todayBtn : "linked",
-			todayHighlight : true,
-			autoclose : true,
-			format : 'yyyy年mm月dd日',
-			language : 'zh-CN'
+		$( document ).ready(function() {
+			$('#newexpForm .input-group.date').datepicker({
+	            todayBtn : "linked",
+	            todayHighlight : true,
+	            autoclose : true,
+	            format : 'yyyy年mm月dd日',
+	            language : 'zh-CN'
+	        });
+	        $('#newexpForm .input-group.date').datepicker('update', new Date());
+	        /*$('#phone_number').on("input", function() {
+	        	  var phonenumber = $(this).val();
+	        	  if(phonenumber.length >= 4){
+	        		  
+	        	  }
+	        });*/
+	        var source = ['18759618858'];
+	        $("#phone_number").typeahead({
+	        	source:source,
+	        	items: 8
+	        });
 		});
-		$('#newexpForm .input-group.date').datepicker('update', new Date());
 	</script>
 </body>
 </html>
