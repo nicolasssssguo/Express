@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1500 1500" enable-background="new 0 0 1500 1500" xml:space="preserve">
+<g>
+	<polygon fill="#EC5A4F" points="712,924 708,921 842,1047 1012,884 1370,1199 1370,880 1062,594 	"/>
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="69.85" y1="1465.8455" x2="69.85" y2="1337.7253" gradientTransform="matrix(10 0 0 -10 0 15000)">
+		<stop  offset="0" style="stop-color:#00A9DE"/>
+		<stop  offset="1" style="stop-color:#444867"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_1_)" points="689,903 708,921 689,902.5 	"/>
+	
+		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="67.9" y1="1465.8455" x2="67.9" y2="1337.7253" gradientTransform="matrix(10 0 0 -10 0 15000)">
+		<stop  offset="0" style="stop-color:#00A9DE"/>
+		<stop  offset="1" style="stop-color:#444867"/>
+	</linearGradient>
+	<polygon fill="url(#SVGID_2_)" points="670,884 669,884 689,903 689,902.5 	"/>
+	<path fill="none" stroke="#EC5A4F" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" d="M689,903"/>
+	
+		<line fill="none" stroke="#EC5A4F" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" x1="689" y1="903" x2="689" y2="902.5"/>
+	<polygon fill="#444867" points="661,876 669,884 670,884 	"/>
+	
+		<line fill="none" stroke="#00A9DE" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" x1="540" y1="768" x2="540" y2="762.5"/>
+	<polygon fill="#00A9DE" points="180,370 180,500 180,958 180,989 180,1070.3 178,1072 180,1070.3 180,1072 489,801 488,801 
+		536,759 536,759 540,762.5 544,766 564,785 660,875 661,876 670,884 689,902.5 708,921 712,924 1062,594 1370,880 1370,832 
+		1370,500 1370,370 	"/>
+	<path fill="none" stroke="#00A9DE" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" d="M536,759"/>
+</g>
+</svg>

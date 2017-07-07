@@ -20,7 +20,9 @@
 <script src="<%=basePath%>resources/js/bootstrap.min.js"></script>
 <script src="<%=basePath%>resources/js/bootstrapValidator.min.js"></script>
 <script src="<%=basePath%>resources/js/bootstrap-datepicker.min.js"></script>
-<script src="<%=basePath%>resources/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script
+	src="<%=basePath%>resources/js/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="<%=basePath%>resources/js/bootstrap-typeahead.min.js"></script>
 <style>
 body, button, input, select, textarea, h1, h2, h3, h4, h5, h6 {
 	font-family: Microsoft YaHei, '宋体', Tahoma, Helvetica, Arial,
@@ -31,6 +33,10 @@ body {
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
+
+.toolbar {
+	margin-bottom: 5px;
+}
 </style>
 </head>
 <body>
@@ -38,93 +44,138 @@ body {
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="#">快递管理系统</a>
+					<a class="navbar-brand"> <img
+						src="<%=basePath%>resources/images/shieldcar.svg" width="25"
+						height="25" alt="">
+					</a>
 				</div>
 				<div>
 					<ul class="nav navbar-nav navbar-left">
-				      <li class="nav-item active">
-				        <a class="nav-link" href="${pageContext.request.contextPath}/index">首页 <span class="sr-only">(current)</span></a>
-				      </li>
-				      <li class="nav-item">
-				        <a class="nav-link" href="${pageContext.request.contextPath}/newexpress">录入快递</a>
-				      </li>
-				    </ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-off"></span>
-							锁定</a></li>
-				</ul>
+						<li class="nav-item active"><a class="nav-link"
+							href="${pageContext.request.contextPath}/index">首页 <span
+								class="sr-only">(current)</span></a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><span class="glyphicon glyphicon-off"></span>
+								锁定</a></li>
+					</ul>
 				</div>
 			</div>
 		</nav>
 
-		<div class="panel panel-default">
-			<div class="text-center">
-				<img src="<%=basePath%>resources/images/logo.png" />
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+					<div class="panel-heading">搜索</div>
+					<div class="panel-body">
+						<form id="searchForm" role="form"
+							action="${pageContext.request.contextPath}/search_express.action"
+							method="POST">
+							<div class="form-group">
+								<label>时间范围：</label>
+								<div class="input-daterange input-group col-sm-7"
+									id="datepicker">
+									<input type="text" class="input-sm form-control" name="start" />
+									<span class="input-group-addon">到</span> <input type="text"
+										class="input-sm form-control" name="end" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label>状态：</label> <label class="checkbox-inline"> <input
+									type="radio" name="express_status" id="optionsRadios3"
+									value="option1" checked>全部
+								</label> <label class="checkbox-inline"> <input type="radio"
+									name="express_status" id="optionsRadios3" value="option1">已签收
+								</label> <label class="checkbox-inline"> <input type="radio"
+									name="express_status" id="optionsRadios3" value="option1">未签收
+								</label>
+							</div>
+
+							<div class="form-group">
+								<label>地址：</label> <select class="form-control">
+									<option>全部</option>
+									<option value="fujian">西良村</option>
+									<option value="fujian">下楼村</option>
+									<option value="fujian">世甲村</option>
+									<option value="fujian">溪墘村</option>
+									<option value="fujian">锦田村</option>
+									<option value="fujian">南书村</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label>手机号码：</label> <input class="form-control" type="text"
+									name="phone_number" />
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">
+									<span class="glyphicon glyphicon-search"></span>搜索
+								</button>
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-lg btn-primary btn-block" type="button">
+									<span class="glyphicon glyphicon-refresh"></span>重置
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+					<div class="panel-heading">录入快递</div>
+					<div class="panel-body">
+						<form id="newexpForm" role="form"
+							action="${pageContext.request.contextPath}/search_express.action"
+							method="POST">
+							<div class="form-group">
+								<label>时间：</label>
+								<div class="input-group date">
+									<input type="text" class="form-control"><span
+										class="input-group-addon"><i
+										class="glyphicon glyphicon-th"></i></span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label>地址：</label> <select class="form-control">
+									<option>全部</option>
+									<option value="fujian">西良村</option>
+									<option value="fujian">下楼村</option>
+									<option value="fujian">世甲村</option>
+									<option value="fujian">溪墘村</option>
+									<option value="fujian">锦田村</option>
+									<option value="fujian">南书村</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label>姓名：</label> <input class="form-control" type="text"
+									name="customer_name" />
+							</div>
+
+							<div class="form-group">
+								<label>手机号码：</label> <input id="phone_number"
+									class="form-control" type="text" name="phone_number"
+									data-provide="typeahead" autocomplete="off" />
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-lg btn-primary btn-block" type="submit">
+									<span class="glyphicon glyphicon-plus"></span>录入
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
-		
-		<div class="panel panel-primary">
-		  <div class="panel-heading">搜索</div>
-		  <div class="panel-body">
-		    <form id="searchForm" role="form" class="form-horizontal" action="${pageContext.request.contextPath}/search_express.action" method="POST">
-		      <div class="row">
-		          <div class="form-group col-md-6">
-	                  <label class="col-sm-3 control-label">时间范围：</label>
-	                  <div class="input-daterange input-group col-sm-9" id="datepicker">
-	                      <input type="text" class="input-sm form-control" name="start" />
-	                      <span class="input-group-addon">到</span>
-	                      <input type="text" class="input-sm form-control" name="end" />
-	                  </div>
-	              </div>
-	              
-	              <div class="form-group col-md-6">
-                      <label class="col-sm-3 control-label">状态：</label>
-                      <label class="checkbox-inline">
-                        <input type="radio" name="express_status" id="optionsRadios3" value="option1" checked>全部
-                      </label>
-                      <label class="checkbox-inline">
-					    <input type="radio" name="express_status" id="optionsRadios3" value="option1">已签收
-					  </label>
-					  <label class="checkbox-inline">
-                        <input type="radio" name="express_status" id="optionsRadios3" value="option1">未签收
-                      </label>
-                  </div>
-		      </div>
-		      
-		      <div class="row">
-		          <div class="form-group col-md-6">
-		              <label class="col-sm-3 control-label">地址：</label>
-		              <div class="col-sm-9">
-		                  <select class="form-control"> 
-	                        <option>全部</option>
-	                        <option value="fujian">西良村</option>
-	                        <option value="fujian">下楼村</option>
-	                        <option value="fujian">世甲村</option>
-	                        <option value="fujian">溪墘村</option>
-	                        <option value="fujian">锦田村</option>
-	                        <option value="fujian">南书村</option>
-	                      </select>
-		              </div>
-                  </div>
-                  
-                  <div class="form-group col-md-6">
-                      <label class="col-sm-3 control-label">手机号码：</label>
-                      <div class="col-sm-9">
-                        <input class="form-control" type="text" name="phone_number" />
-                      </div>
-                  </div>
-		      </div>
-		      
-		      <div class="text-center">
-		          <button class="btn btn-primary btn-md" type="submit">
-		          <span class="glyphicon glyphicon-search"></span>搜索</button>
-		          <button class="btn btn-default btn-md" type="button">
-		          <span class="glyphicon glyphicon-refresh"></span>重置</button>
-		      </div>
-		    </form>
-		  </div>
-        </div>
-		
+
+
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-bordered table-striped">
@@ -150,15 +201,21 @@ body {
 			</div>
 		</div>
 	</div>
-	
-	<div class="row footer">
-	   
-	</div>
+
+	<div class="row footer"></div>
 	<script>
-	$('#searchForm .input-daterange').datepicker({
-		format: 'yyyy年mm月dd日',
-		language: 'zh-CN'
-	});
+		$('#newexpForm .input-group.date').datepicker({
+			todayBtn : "linked",
+			todayHighlight : true,
+			autoclose : true,
+			format : 'yyyy年mm月dd日',
+			language : 'zh-CN'
+		});
+		$('#newexpForm .input-group.date').datepicker('update', new Date());
+		$('#searchForm .input-daterange').datepicker({
+			format : 'yyyy年mm月dd日',
+			language : 'zh-CN'
+		});
 	</script>
 </body>
 </html>
