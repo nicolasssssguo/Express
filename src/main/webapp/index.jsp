@@ -70,12 +70,11 @@ body {
 				<div class="panel-body">
 					<div class="col-md-6">
 						<form id="searchForm" role="form"
-							action="${pageContext.request.contextPath}/search_express.action"
+							action="${pageContext.request.contextPath}/exp/search.action"
 							method="POST">
 							<div class="form-group">
 								<label>时间范围：</label>
-								<div class="input-daterange input-group"
-									id="datepicker">
+								<div class="input-daterange input-group" id="datepicker">
 									<input type="text" class="input-sm form-control" name="start" />
 									<span class="input-group-addon">到</span> <input type="text"
 										class="input-sm form-control" name="end" />
@@ -100,12 +99,12 @@ body {
 							</div>
 
 							<div class="form-group">
-								<label>手机号码：</label> <input class="form-control" type="text"
-									name="phone_number" />
+								<label>手机号码：</label> <input class="form-control phone_number" type="text"
+									name="phone_number" class="phone_number" />
 							</div>
 
 							<div class="form-group">
-								<button class="btn btn-lg btn-primary btn-block" type="submit">
+								<button class="btn btn-lg btn-primary btn-block" type="button">
 									<span class="glyphicon glyphicon-search"></span> 搜索
 								</button>
 							</div>
@@ -120,7 +119,7 @@ body {
 					</div>
 					<div class="col-md-6">
 						<form id="newexpForm" role="form"
-							action="${pageContext.request.contextPath}/search_express.action"
+							action="${pageContext.request.contextPath}/exp/new.action"
 							method="POST">
 							<div class="form-group">
 								<label>时间：</label>
@@ -143,9 +142,9 @@ body {
 							</div>
 
 							<div class="form-group">
-								<label>手机号码：</label> <input id="phone_number"
-									class="form-control" type="text" name="phone_number"
-									data-provide="typeahead" autocomplete="off" />
+								<label>手机号码：</label> <input class="form-control phone_number"
+									type="text" name="phone_number" data-provide="typeahead"
+									autocomplete="off" />
 							</div>
 
 							<div class="form-group">
@@ -204,29 +203,70 @@ body {
 								new Date());
 						$('#searchForm .input-daterange').datepicker({
 							todayBtn : "linked",
-                            todayHighlight : true,
-                            autoclose : true,
+							todayHighlight : true,
+							autoclose : true,
 							format : 'yyyy年mm月dd日',
 							language : 'zh-CN'
 						});
 						var source = [ '18759618858' ];
-						$("#phone_number").typeahead({
+						$("#newexpForm input.phone_number").typeahead({
 							source : source,
 							items : 8
 						});
-						
-						$.ajax({  
-			                   type: "POST",  
-			                   url: "arealist.action",  
-			                   data: {},  
-			                   success:function(data){  
-			                       for(i in data){
-			                    	   var area = data[i];
-			                    	   $('#searchForm select.area').append('<option value="'+area.code+'">'+area.name+'</option>');
-			                    	   $('#newexpForm select.area').append('<option value="'+area.code+'">'+area.name+'</option>')
-			                       }
-			                   }  
-			            });
+						$('#newexpForm').bootstrapValidator({
+							feedbackIcons : {
+								valid : 'glyphicon glyphicon-ok',
+								invalid : 'glyphicon glyphicon-remove',
+								validating : 'glyphicon glyphicon-refresh'
+							},
+							fields : {
+								phone_number : {
+									validators : {
+										notEmpty : {
+											message : '手机号码不能为空'
+										},
+										regexp : {
+											regexp : /^\d{11}$/,
+											message : '无效的手机号码'
+										}
+									}
+								}
+							}
+						}).on('success.form.bv', function(e) {
+							e.preventDefault();
+                            $.ajax({
+                                  type:'POST',
+                                  url:$('#newexpForm').attr('action'),
+                                  data:$('#newexpForm').serialize(),
+                                  success:function(data){
+                                      console.log(data);
+                                  }
+                              });
+						});
+						$('#newexpForm input.phone_number').on(
+								'change paste keyup',
+								function(e) {
+									$('#newexpForm')
+									.bootstrapValidator('updateStatus', 'phone_number', 'NOT_VALIDATED')
+                                    .bootstrapValidator('validateField', 'phone_number');
+								});
+
+						$.ajax({
+							type : "POST",
+							url : "area/list.action",
+							data : {},
+							success : function(data) {
+								for (i in data) {
+									var area = data[i];
+									$('#searchForm select.area').append(
+											'<option value="'+area.code+'">'
+													+ area.name + '</option>');
+									$('#newexpForm select.area').append(
+											'<option value="'+area.code+'">'
+													+ area.name + '</option>')
+								}
+							}
+						});
 					});
 		</script>
 </body>

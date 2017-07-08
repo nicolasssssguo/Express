@@ -12,12 +12,13 @@ import com.nicolasguo.express.entity.Area;
 import com.nicolasguo.express.service.AreaService;
 
 @Controller
+@RequestMapping("/area")
 public class AreaAction {
 	
 	@Resource(name = "areaService")
 	private AreaService<Area, String> areaService;
 	
-	@RequestMapping("/arealist.action")
+	@RequestMapping("/list.action")
 	public @ResponseBody List<Area> areaList(){
 		Area parent = areaService.getArea("350681110000");
 		

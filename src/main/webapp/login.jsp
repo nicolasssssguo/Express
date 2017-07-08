@@ -36,7 +36,7 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 						<img src="<%=basePath %>resources/images/logo.png" />
 					</div><!-- end of panel-heading -->
 					<div class="panel-body">
-						<form role="form" id="loginForm" action="${pageContext.request.contextPath}/login.action" method="POST">
+						<form role="form" id="loginForm" action="${pageContext.request.contextPath}/user/login.action" method="POST">
 							<!-- username field -->
 							<div class="form-group">
 								<label for="username">用户名:</label>

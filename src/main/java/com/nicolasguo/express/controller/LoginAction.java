@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.nicolasguo.express.entity.User;
 
 @Controller
+@RequestMapping("/user")
 public class LoginAction {
 	
 	@RequestMapping("/login.action")
