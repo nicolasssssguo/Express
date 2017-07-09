@@ -1,34 +1,25 @@
 package com.nicolasguo.express.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.nicolasguo.express.common.ProjectConfig;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "tb_express")
 public class Express extends BaseEntityObject {
 
-	private Customer sender;
-
 	private Customer recipient;
 
-	private Area origin;
+	private Area dest;
 
-	private Area destination;
+	private int status;
 
-	private char type;
-
-	@ManyToOne
-	public Customer getSender() {
-		return sender;
-	}
-
-	public void setSender(Customer sender) {
-		this.sender = sender;
-	}
+	private Date signTime;
 
 	@ManyToOne
 	public Customer getRecipient() {
@@ -40,30 +31,35 @@ public class Express extends BaseEntityObject {
 	}
 
 	@ManyToOne
-	public Area getOrigin() {
-		return origin;
+	public Area getDest() {
+		return dest;
 	}
 
-	public void setOrigin(Area origin) {
-		this.origin = origin;
-	}
-
-	@ManyToOne
-	public Area getDestination() {
-		return destination;
-	}
-
-	public void setDestination(Area destination) {
-		this.destination = destination;
+	public void setDest(Area dest) {
+		this.dest = dest;
 	}
 
 	@Column
-	public char getType() {
-		return type;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setType(char type) {
-		this.type = type;
+	public void setStatus(int status) {
+		this.status = status;
+		if(this.status == 0){
+			setSignTime(null);
+		}else if(this.status == 1){
+			setSignTime(new Date());
+		}
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getSignTime() {
+		return signTime;
+	}
+
+	public void setSignTime(Date signTime) {
+		this.signTime = signTime;
 	}
 
 }

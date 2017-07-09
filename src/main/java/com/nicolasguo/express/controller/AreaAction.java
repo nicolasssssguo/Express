@@ -21,7 +21,6 @@ public class AreaAction {
 	@RequestMapping("/list.action")
 	public @ResponseBody List<Area> areaList(){
 		Area parent = areaService.getArea("350681110000");
-		
 		return areaService.findAreaByProperty("parent", parent);
 	}
 

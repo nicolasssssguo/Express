@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,58 +28,80 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 		this.entityClass = entityClass;
 	}
 	
-	public Session currentSession(){
+	public Session openSession(){
 		return sessionFactory.openSession();
 	}
 	
 	@Override
 	public T get(String id) {
-		return currentSession().get(entityClass, id);
+		return openSession().get(entityClass, id);
 	}
 
 	@Override
 	public T load(String id) {
-		return currentSession().load(entityClass, id);
+		return openSession().load(entityClass, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findByProperty(String propertyName, Object propertyValue) {
 		String queryString = "from " + this.entityClass.getSimpleName() + " t where t." + propertyName + " = :" + propertyName;
-		return currentSession().createQuery(queryString)
+		return openSession().createQuery(queryString)
 				.setParameter(propertyName, propertyValue)
 				.list();
 	}
 
 	public void delete(T entity) {
-		currentSession().delete(entity);
+		Session session = openSession();
+		Transaction tx = session.beginTransaction();
+		session.delete(entity);
+		tx.commit();
+		session.close();
 	}
-	
 
 	@Override
 	public void deleteEntitys(List<T> list) {
-		list.forEach(currentSession()::delete);
+		Session session = openSession();
+		Transaction tx = session.beginTransaction();
+		list.forEach(session::delete);
+		session.flush();
+		tx.commit();
+		session.close();
 	}
 
 	public void save(T entity) {
-		currentSession().save(entity);
+		Session session = openSession();
+		Transaction tx = session.beginTransaction();
+		session.save(entity);
+		tx.commit();
+		session.close();
 	}
 
 	public void update(T entity) {
-		currentSession().update(entity);
+		Session session = openSession();
+		Transaction tx = session.beginTransaction();
+		session.update(entity);
+		tx.commit();
+		session.close();
 	}
 	
 	public long count(){
 		DetachedCriteria criteria = DetachedCriteria.forClass(entityClass);
 		criteria.setProjection(Projections.rowCount());
-		return (long) criteria.getExecutableCriteria(currentSession()).uniqueResult();
+		return (long) criteria.getExecutableCriteria(openSession()).uniqueResult();
+	}
+	
+	public long count(HibernateCondition condition){
+		DetachedCriteria criteria = condition.getCriteria();
+		criteria.setProjection(Projections.rowCount());
+		return (long) criteria.getExecutableCriteria(openSession()).uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findAll() {
 		String queryString = "from " + entityClass.getSimpleName();
-		return currentSession().createQuery(queryString)
+		return openSession().createQuery(queryString)
 				.list();
 	}
 	
@@ -86,7 +109,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	@Override
 	public Page<T> findAll(Page<T> page) {
 		String queryString = "from " + entityClass.getSimpleName();
-		List<T> result = currentSession().createQuery(queryString)
+		List<T> result = openSession().createQuery(queryString)
 				.setFirstResult(page.getPageSize() * (page.getPageNo() - 1))
 				.setMaxResults(page.getPageSize())
 				.list();
@@ -99,7 +122,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	@Override
 	public List<T> findByCondition(HibernateCondition condition) {
 		return condition.getCriteria()
-				.getExecutableCriteria(currentSession())
+				.getExecutableCriteria(openSession())
 				.list();
 	}
 	
@@ -107,11 +130,11 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	@Override
 	public Page<T> findByCondition(HibernateCondition condition, Page<T> page) {
 		List<T> result = condition.getCriteria()
-				.getExecutableCriteria(currentSession())
+				.getExecutableCriteria(openSession())
 				.setFirstResult(page.getPageSize() * (page.getPageNo() - 1))
 				.setMaxResults(page.getPageSize())
 				.list();
-		page.setTotalRecords(count());
+		page.setTotalRecords(count(condition));
 		page.setList(result);
 		return page;
 	}
@@ -119,7 +142,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List findByCriteria(DetachedCriteria criteria){
-		return criteria.getExecutableCriteria(currentSession())
+		return criteria.getExecutableCriteria(openSession())
 				.list();
 	}
 }

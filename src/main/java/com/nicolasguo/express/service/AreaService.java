@@ -10,6 +10,8 @@ public interface AreaService<T, PK extends Serializable> {
 	public T getArea(PK id);
 
 	public T loadArea(PK id);
+	
+	public List<T> findAll();
 
 	public List<T> findAreaByProperty(String propertyName, Object propertyValue);
 

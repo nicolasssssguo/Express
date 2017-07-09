@@ -28,6 +28,11 @@ public class AreaServiceImpl implements AreaService<Area, String> {
 	}
 
 	@Override
+	public List<Area> findAll() {
+		return areaDao.findAll();
+	}
+	
+	@Override
 	public List<Area> findAreaByProperty(String propertyName, Object propertyValue) {
 		return areaDao.findByProperty(propertyName, propertyValue);
 	}
@@ -56,6 +61,4 @@ public class AreaServiceImpl implements AreaService<Area, String> {
 	public void deleteAreas(List<Area> list) {
 		areaDao.deleteEntitys(list);
 	}
-	
-	
 }

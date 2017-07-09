@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Page<T> {
 
+	public static final int DEFAULT_PAGE_SIZE = 6;
+	
 	// 结果集
 	private List<T> list;
 
@@ -11,10 +13,10 @@ public class Page<T> {
 	private long totalRecords;
 
 	// 每页多少条记录
-	private int pageSize;
+	private int pageSize = DEFAULT_PAGE_SIZE;
 
 	// 第几页
-	private int pageNo;
+	private int pageNo = 1;
 
 	/**
 	 * @return 总页数

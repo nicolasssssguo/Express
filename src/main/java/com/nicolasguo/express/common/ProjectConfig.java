@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.nicolasguo.express.dao.IBaseEntityDao;
 import com.nicolasguo.express.dao.impl.BaseEntityDaoImpl;
 import com.nicolasguo.express.entity.Area;
+import com.nicolasguo.express.entity.Customer;
 import com.nicolasguo.express.entity.Express;
 import com.nicolasguo.express.entity.User;
 
@@ -31,4 +32,8 @@ public class ProjectConfig {
 		return new BaseEntityDaoImpl<Express>(Express.class);
 	}
 
+	@Bean(name = "customerDao")
+	public IBaseEntityDao<Customer> generateCustomerDao(){
+		return new BaseEntityDaoImpl<Customer>(Customer.class);
+	}
 }

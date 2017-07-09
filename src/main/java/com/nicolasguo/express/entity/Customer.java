@@ -2,19 +2,18 @@ package com.nicolasguo.express.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
 @Table(name = "tb_customer")
 public class Customer extends BaseEntityObject {
 
 	private String name;
-	
-	private String idcard;
-	
+
 	private String phoneNumber;
+
+	private Area area;
 
 	@Column(length = 255)
 	public String getName() {
@@ -23,15 +22,6 @@ public class Customer extends BaseEntityObject {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@Column(length = 18)
-	public String getIdcard() {
-		return idcard;
-	}
-
-	public void setIdcard(String idcard) {
-		this.idcard = idcard;
 	}
 
 	@Column(length = 11)
@@ -43,4 +33,17 @@ public class Customer extends BaseEntityObject {
 		this.phoneNumber = phoneNumber;
 	}
 
+	@ManyToOne
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+
+	@Override
+	public String toString() {
+		return area.getName()+" "+getName()+" "+getPhoneNumber();
+	}
 }
