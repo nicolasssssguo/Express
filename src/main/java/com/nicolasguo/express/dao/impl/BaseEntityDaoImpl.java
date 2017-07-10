@@ -108,7 +108,7 @@ public class BaseEntityDaoImpl<T> implements IBaseEntityDao<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Page<T> findAll(Page<T> page) {
-		String queryString = "from " + entityClass.getSimpleName();
+		String queryString = "from " + entityClass.getSimpleName() + " order by createTime desc";
 		List<T> result = openSession().createQuery(queryString)
 				.setFirstResult(page.getPageSize() * (page.getPageNo() - 1))
 				.setMaxResults(page.getPageSize())

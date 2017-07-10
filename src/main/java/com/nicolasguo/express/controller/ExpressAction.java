@@ -49,10 +49,11 @@ public class ExpressAction {
 		return mav;
 	}
 
-	@RequestMapping("/create.action")
-	public @ResponseBody String newExpress(@RequestParam("name") String name,
-			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("area") String areacode,
-			@RequestParam("createTime") String createTime, @RequestParam("status") int status) throws ParseException {
+	@RequestMapping("/createOrUpdate.action")
+	public @ResponseBody String createExpress(@RequestParam(value = "id", required = false) String id,
+			@RequestParam("name") String name, @RequestParam("phoneNumber") String phoneNumber,
+			@RequestParam("area") String areacode, @RequestParam("arriveDate") String arriveDate,
+			@RequestParam("status") int status) throws ParseException {
 		Area area = areaService.findAreaByProperty("code", areacode).get(0);
 		List<Customer> customerList = customerService.findCustomerByProperty("phoneNumber", phoneNumber);
 		Customer recipient = null;
@@ -67,14 +68,34 @@ public class ExpressAction {
 		} else {
 			recipient = customerList.get(0);
 		}
-		Express express = new Express();
-		express.setId(UUID.generateUUID());
+		Express express = expressService.getExpress(id);
+		if(express == null){
+			express = new Express();
+			express.setId(UUID.generateUUID());
+			express.setCreateTime(new Date());
+		}
 		express.setDest(area);
 		express.setRecipient(recipient);
 		express.setStatus(status);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-		express.setCreateTime(format.parse(createTime));
-		expressService.saveExpress(express);
+		express.setArriveDate(format.parse(arriveDate));
+		
+		if(StringUtils.isEmpty(id)){
+			expressService.saveExpress(express);
+			return "create";
+		}else{
+			express.setModifyTime(new Date());
+			expressService.updateExpress(express);
+			return "update";
+		}
+	}
+
+	@RequestMapping("/remove.action")
+	public @ResponseBody String removeExpress(@RequestParam("ids[]") List<String> ids) {
+		ExpressCondition condition = new ExpressCondition();
+		condition.setIds(ids);
+		List<Express> removeList = expressService.findExpressByCondition(condition);
+		expressService.deleteExpresss(removeList);
 		return "success";
 	}
 
@@ -116,5 +137,11 @@ public class ExpressAction {
 		express.setStatus(1);
 		expressService.updateExpress(express);
 		return "redirect:/express/index";
+	}
+
+	@RequestMapping("/fetch.action")
+	public @ResponseBody Express fetchExpress(@RequestParam String id) {
+		Express express = expressService.getExpress(id);
+		return express;
 	}
 }

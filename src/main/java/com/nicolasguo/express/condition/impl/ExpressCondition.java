@@ -1,8 +1,10 @@
 package com.nicolasguo.express.condition.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.nicolasguo.express.condition.HibernateCondition;
@@ -19,6 +21,8 @@ public class ExpressCondition extends HibernateCondition<Express> {
 
 	private int status = -1;
 
+	private List<String> ids;
+
 	@Override
 	public void createCriteria(DetachedCriteria criteria) {
 		if (startDate != null) {
@@ -33,6 +37,10 @@ public class ExpressCondition extends HibernateCondition<Express> {
 		if (status != -1) {
 			criteria.add(Restrictions.eq("status", status));
 		}
+		if (ids != null) {
+			criteria.add(Restrictions.in("id", ids));
+		}
+		criteria.addOrder(Order.desc("createTime"));
 
 	}
 
@@ -50,6 +58,10 @@ public class ExpressCondition extends HibernateCondition<Express> {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public void setIds(List<String> ids) {
+		this.ids = ids;
 	}
 
 }

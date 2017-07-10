@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String contextPath = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -41,12 +42,12 @@ body {
 </style>
 </head>
 <body>
-	<div class="modal fade" id="expressDialog" tabindex="-1" role="dialog"
+	<div class="modal fade" id="expressDialog" expressid="" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">快递录入</h4>
+					<h4 class="modal-title">快递信息</h4>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -56,21 +57,21 @@ body {
 					<div class="alert alert-success collapse" role="alert">录入成功！</div>
 					<div class="alert alert-danger collapse" role="alert">录入失败！</div>
 					<form id="expressForm" role="form"
-						action="${pageContext.request.contextPath}/express/create.action"
+						action="${pageContext.request.contextPath}/express/createOrUpdate.action"
 						method="POST">
+						<input type="hidden" name="id" />
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon">姓名</span> <input
-									class="form-control" type="text"
-									name="name" />
+									class="form-control" type="text" name="name" />
 							</div>
 						</div>
 
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon">手机号码</span> <input
-									class="form-control phoneNumber" type="text"
-									name="phoneNumber" class="phoneNumber" autocomplete="off" />
+									class="form-control phoneNumber" type="text" name="phoneNumber"
+									class="phoneNumber" autocomplete="off" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -82,8 +83,9 @@ body {
 						</div>
 						<div class="form-group">
 							<div class="input-group date">
-								<span class="input-group-addon">时间</span> <input type="text" name="createTime"
-									class="form-control"><span class="input-group-addon"><i
+								<span class="input-group-addon">时间</span> <input type="text"
+									name="arriveDate" class="form-control"><span
+									class="input-group-addon"><i
 									class="glyphicon glyphicon-th"></i></span>
 							</div>
 						</div>
@@ -105,11 +107,33 @@ body {
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">关闭</button>
 					<button type="button" class="btn btn-primary"
-						onclick="createExpress()">录入</button>
+						onclick="createOrUpdateExpress()">确定</button>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="confirmDialog" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">快递管理系统</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">是否删除选中的快递？</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="removeExpress()">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="container">
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
@@ -178,8 +202,8 @@ body {
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon">手机号码</span> <input
-									class="form-control phoneNumber" type="text"
-									name="phoneNumber" class="phoneNumber" value="18759618858" autocomplete="off" />
+									class="form-control phoneNumber" type="text" name="phoneNumber"
+									class="phoneNumber" value="18759618858" autocomplete="off" />
 							</div>
 						</div>
 					</div>
@@ -188,8 +212,9 @@ body {
 							<button class="btn btn-md btn-primary" type="submit">
 								<span class="glyphicon glyphicon-search"></span> 搜索
 							</button>
-							<a href="${pageContext.request.contextPath}/express/index" class="btn btn-md btn-default">
-								<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+							<a href="${pageContext.request.contextPath}/express/index"
+								class="btn btn-md btn-default"> <span
+								class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
 								重置
 							</a>
 						</div>
@@ -205,13 +230,15 @@ body {
 					<div class="col-md-4">
 						<div class="btn-group" role="group" aria-label="Basic example">
 							<button class="btn btn-default" type="button"
-								onclick="showNewExpDialog()">
+								onclick="showExpressDialog()">
 								<span class="glyphicon glyphicon-plus"></span> 增加
 							</button>
-							<button id="btnEdit" class="btn btn-default" type="button" disabled>
+							<button id="btnEdit" class="btn btn-default" type="button" onclick="onEditClick()"
+								disabled>
 								<span class="glyphicon glyphicon-pencil"></span> 编辑
 							</button>
-							<button id="btnRemove" class="btn btn-default" type="button" disabled>
+							<button id="btnRemove" class="btn btn-default" type="button" onclick="showConfirmDialog()"
+								disabled>
 								<span class="glyphicon glyphicon-remove"></span> 删除
 							</button>
 						</div>
@@ -221,24 +248,34 @@ body {
 			<table id="expressTable" class="table table-bordered table-hober">
 				<thead>
 					<tr class="success">
+						<th class="text-center" style="width:36px;"><input type="checkbox" id="checkAll" name="checkAll" /></th>
 						<th class="text-center">姓名</th>
 						<th class="text-center">地址</th>
-						<th class="text-center">电话</th>
+						<th class="text-center">手机号码</th>
+						<th class="text-center">到达日期</th>
 						<th class="text-center">状态</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${expressPage.list}" var="item">
 						<tr>
+							<td class="text-center" style="width:36px;"><input id="${item.id}" type="checkbox" name="checkItem" /></td>
 							<td class="text-center">${item.recipient.name}</td>
 							<td class="text-center">${item.dest.name}</td>
 							<td class="text-center">${item.recipient.phoneNumber}</td>
+							<td class="text-center"><fmt:formatDate value="${item.arriveDate}"
+											pattern="yyyy-MM-dd" /></td>
 							<c:if test="${item.status == 0}">
-							<td class="text-center"><a href="${pageContext.request.contextPath}/express/sign.action?id=${item.id}">
-							<span class="glyphicon glyphicon-pencil"></span> 签收</a></td>
+								<td class="text-center"><a
+									href="${pageContext.request.contextPath}/express/sign.action?id=${item.id}">
+										<span class="glyphicon glyphicon-pencil"></span> 签收
+								</a></td>
 							</c:if>
 							<c:if test="${item.status == 1}">
-							<td class="text-center"><span class="text-danger">已签收(签收时间: ${item.signTime})</span></td>
+								<td class="text-center"><span class="text-danger">已签收(签收时间:
+										<fmt:formatDate value="${item.signTime}"
+											pattern="yyyy-MM-dd HH:mm:ss" />)
+								</span></td>
 							</c:if>
 						</tr>
 					</c:forEach>
@@ -253,10 +290,12 @@ body {
 									<li class="disabled"><a aria-label="上一页">上一页</a></li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${action}?pageNo=${expressPage.pageNo-1}" aria-label="上一页">上一页</a></li>
+									<li><a href="${action}?pageNo=${expressPage.pageNo-1}"
+										aria-label="上一页">上一页</a></li>
 								</c:otherwise>
 							</c:choose>
-							<c:forEach begin="1" end="${expressPage.getTotalPages()}" var="pageNo">
+							<c:forEach begin="1" end="${expressPage.getTotalPages()}"
+								var="pageNo">
 								<c:if test="${expressPage.pageNo != pageNo}">
 									<li><a href="${action}?pageNo=${pageNo}">${pageNo}</a></li>
 								</c:if>
@@ -265,11 +304,13 @@ body {
 								</c:if>
 							</c:forEach>
 							<c:choose>
-								<c:when test="${expressPage.pageNo >= expressPage.getTotalPages()}">
+								<c:when
+									test="${expressPage.pageNo >= expressPage.getTotalPages()}">
 									<li class="disabled"><a aria-label="下一页">下一页</a></li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="${action}?pageNo=${expressPage.pageNo+1}" aria-label="下一页">下一页</a></li>
+									<li><a href="${action}?pageNo=${expressPage.pageNo+1}"
+										aria-label="下一页">下一页</a></li>
 								</c:otherwise>
 							</c:choose>
 						</ul>
@@ -280,31 +321,54 @@ body {
 
 		<div class="row footer"></div>
 		<script>
-			function showNewExpDialog() {
+			function showExpressDialog(expid) {
+				$('#expressForm input[name="id"]').val(expid);
 				$('#expressDialog').modal('show');
 			}
-			function createExpress() {
+			function showConfirmDialog() {
+				$('#confirmDialog').modal('show');
+			}
+			function createOrUpdateExpress() {
 				var $form = $('#expressForm');
 				var bv = $form.data('bootstrapValidator');
 				bv.validate();
 				if (bv.isValid()) {
-					$.post($form.attr('action'), $form.serialize(), function(
-							result) {
-						$('#expressDialog div.alert-success').fadeIn();
-						$('#expressForm').bootstrapValidator('resetForm', true);
-					});
+					$.post($form.attr('action'), $form.serialize(),
+							function(result) {
+								console.log('update' == result);
+								if('create' == result){
+									$('#expressDialog div.alert-success').fadeIn();
+									$('#expressForm').bootstrapValidator(
+											'resetForm', true);
+								}else if('update' == result){
+									$('#expressDialog').modal('hide');
+								}
+							});
 				}
 			}
-			function tableToolbarControl(checkedCount){
-				$("#btnEdit").prop('disabled', (checkedCount == 0 || checkedCount > 1));
+			function onEditClick(){
+				var $tbr = $('table tbody tr');
+				var expid = $tbr.find('input:checked').attr('id');
+				showExpressDialog(expid);
+			}
+			function removeExpress(){
+				var ids = new Array();
+				var $tbr = $('table tbody tr');
+				$tbr.find('input:checked').each(function(){
+					ids.push($(this).attr('id'));
+				});
+				$.post("remove.action", {"ids[]":ids}, function(){
+					document.location.reload();
+				})
+			}
+			function tableToolbarControl(checkedCount) {
+				$("#btnEdit").prop('disabled',
+						(checkedCount == 0 || checkedCount > 1));
 				$("#btnRemove").prop('disabled', (checkedCount == 0));
 			}
-			
+
 			function initTableCheckbox() {
 				var $thr = $('table thead tr');
-				var $checkAllTh = $('<th class="text-center" style="width:36px;"><input type="checkbox" id="checkAll" name="checkAll" /></th>');
-				/*将全选/反选复选框添加到表头最前，即增加一列*/
-				$thr.prepend($checkAllTh);
 
 				var $checkAll = $thr.find('input');
 				$checkAll
@@ -325,13 +389,11 @@ body {
 							/*阻止向上冒泡，以防再次触发点击操作*/
 							event.stopPropagation();
 						});
-				$checkAllTh.click(function() {
+				$checkAll.parent().click(function() {
 					$(this).find('input').click();
 				});
 
 				var $tbr = $('table tbody tr');
-				var $checkItemTd = $('<td class="text-center" style="width:36px;"><input type="checkbox" name="checkItem" /></td>');
-				$tbr.prepend($checkItemTd);
 				$tbr
 						.find('input')
 						.click(
@@ -345,7 +407,8 @@ body {
 													'checked',
 													$tbr.find('input:checked').length == $tbr.length ? true
 															: false);
-									tableToolbarControl($tbr.find('input:checked').length);
+									tableToolbarControl($tbr
+											.find('input:checked').length);
 									/*阻止向上冒泡，以防再次触发点击操作*/
 									event.stopPropagation();
 								});
@@ -354,133 +417,177 @@ body {
 					$(this).find('input').click();
 				});
 			}
-			$(document).ready(
-					function() {
-						$('#expressForm .input-group.date').datepicker({
-							todayBtn : "linked",
-							todayHighlight : true,
-							autoclose : true,
-							format : 'yyyy年mm月dd日',
-							language : 'zh-CN'
-						});
-						$('#expressForm .input-group.date').datepicker('update',
-								new Date());
-						$('#expressForm .input-group.date').datepicker(
-								'setEndDate', new Date());
-						$('#searchForm .input-daterange').datepicker({
-							todayBtn : "linked",
-							todayHighlight : true,
-							autoclose : true,
-							format : 'yyyy年mm月dd日',
-							language : 'zh-CN'
-						});
-						$("#expressForm input.phoneNumber").typeahead({
-							source : function (query, process) {
-					            return $.get('${pageContext.request.contextPath}/customer/search?keynumber=' + query, function (data) {
-					            	console.log(data);
-					                return process(data);
-					            });
-					        },
-					        displayText:function(item){
-					        	return typeof item !== 'undefined' && typeof item.phoneNumber != 'undefined' ? item.phoneNumber : item;
-					        },
-					        afterSelect:function(item){
-					        	var $area = $('#expressForm select[name="area"]');
-					        	var $name = $('#expressForm input[name="name"]');
-					        	$area.val(item.area.code);
-					        	$name.val(item.name);
-					        	$('#expressDialog div.alert-success').hide();
-					        },
-							delay : 300
-						});
-						$('#expressForm').bootstrapValidator({
-							feedbackIcons : {
-								valid : 'glyphicon glyphicon-ok',
-								invalid : 'glyphicon glyphicon-remove',
-								validating : 'glyphicon glyphicon-refresh'
-							},
-							fields : {
-								phoneNumber : {
-									validators : {
-										notEmpty : {
-											message : '手机号码不能为空'
-										},
-										regexp : {
-											regexp : /^\d{11}$/,
-											message : '无效的手机号码'
-										}
-									}
-								},
-								area : {
-									validators : {
-										notEmpty : {
-											message : '地址不能为空'
-										}
-									}
-								},
-								name : {
-									validators : {
-										notEmpty : {
-											message : '姓名不能为空'
-										}
-									}
-								}
-							}
-						});
-						
-						$('#searchForm').bootstrapValidator({
-							feedbackIcons : {
-								valid : 'glyphicon glyphicon-ok',
-								invalid : 'glyphicon glyphicon-remove',
-								validating : 'glyphicon glyphicon-refresh'
-							},
-							fields : {
-								phoneNumber : {
-									validators : {
-										notEmpty : {
-											message : '手机号码不能为空'
-										},
-										regexp : {
-											regexp : /^\d{11}$/,
-											message : '无效的手机号码'
-										}
-									}
-								}
-							}
-						});
-
-						$('#expressForm input.phoneNumber').on(
-								'change paste keyup',
-								function(e) {
-									$('#expressForm').bootstrapValidator(
-											'updateStatus', 'phoneNumber',
-											'NOT_VALIDATED')
-											.bootstrapValidator(
-													'validateField',
-													'phoneNumber');
+			$(document)
+					.ready(
+							function() {
+								$('#expressForm .input-group.date').datepicker(
+										{
+											todayBtn : "linked",
+											todayHighlight : true,
+											autoclose : true,
+											format : 'yyyy年mm月dd日',
+											language : 'zh-CN'
+										});
+								$('#expressForm .input-group.date').datepicker(
+										'update', new Date());
+								$('#expressForm .input-group.date').datepicker(
+										'setEndDate', new Date());
+								$('#searchForm .input-daterange').datepicker({
+									todayBtn : "linked",
+									todayHighlight : true,
+									autoclose : true,
+									format : 'yyyy年mm月dd日',
+									language : 'zh-CN'
 								});
+								$("#expressForm input.phoneNumber")
+										.typeahead(
+												{
+													source : function(query,
+															process) {
+														return $
+																.get(
+																		'${pageContext.request.contextPath}/customer/search?keynumber='
+																				+ query,
+																		function(
+																				data) {
+																			console
+																					.log(data);
+																			return process(data);
+																		});
+													},
+													displayText : function(item) {
+														return typeof item !== 'undefined'
+																&& typeof item.phoneNumber != 'undefined' ? item.phoneNumber
+																: item;
+													},
+													afterSelect : function(item) {
+														var $area = $('#expressForm select[name="area"]');
+														var $name = $('#expressForm input[name="name"]');
+														$area
+																.val(item.area.code);
+														$name.val(item.name);
+														$(
+																'#expressDialog div.alert-success')
+																.hide();
+													},
+													delay : 300
+												});
+								$('#expressForm')
+										.bootstrapValidator(
+												{
+													feedbackIcons : {
+														valid : 'glyphicon glyphicon-ok',
+														invalid : 'glyphicon glyphicon-remove',
+														validating : 'glyphicon glyphicon-refresh'
+													},
+													fields : {
+														phoneNumber : {
+															validators : {
+																notEmpty : {
+																	message : '手机号码不能为空'
+																},
+																regexp : {
+																	regexp : /^\d{11}$/,
+																	message : '无效的手机号码'
+																}
+															}
+														},
+														area : {
+															validators : {
+																notEmpty : {
+																	message : '地址不能为空'
+																}
+															}
+														},
+														name : {
+															validators : {
+																notEmpty : {
+																	message : '姓名不能为空'
+																}
+															}
+														}
+													}
+												});
 
-						$.ajax({
-							type : "POST",
-							url : "${pageContext.request.contextPath}/area/list.action",
-							data : {},
-							success : function(data) {
-								for (i in data) {
-									var area = data[i];
-									$('select.area').append(
-											'<option value="'+area.code+'">'
-													+ area.name + '</option>');
-								}
-							}
-						});
+								$('#searchForm')
+										.bootstrapValidator(
+												{
+													feedbackIcons : {
+														valid : 'glyphicon glyphicon-ok',
+														invalid : 'glyphicon glyphicon-remove',
+														validating : 'glyphicon glyphicon-refresh'
+													},
+													fields : {
+														phoneNumber : {
+															validators : {
+																notEmpty : {
+																	message : '手机号码不能为空'
+																},
+																regexp : {
+																	regexp : /^\d{11}$/,
+																	message : '无效的手机号码'
+																}
+															}
+														}
+													}
+												});
 
-						initTableCheckbox();
-						
-						$('#expressDialog').on('hidden.bs.modal',function(){
-							location.reload();
-							//$('#expressForm').bootstrapValidator('resetForm', true);
-						});
-					});
+								$('#expressForm input.phoneNumber').on(
+										'change paste keyup',
+										function(e) {
+											$('#expressForm')
+													.bootstrapValidator(
+															'updateStatus',
+															'phoneNumber',
+															'NOT_VALIDATED')
+													.bootstrapValidator(
+															'validateField',
+															'phoneNumber');
+										});
+
+								$
+										.ajax({
+											type : "POST",
+											url : "${pageContext.request.contextPath}/area/list.action",
+											data : {},
+											success : function(data) {
+												for (i in data) {
+													var area = data[i];
+													$('select.area')
+															.append(
+																	'<option value="'+area.code+'">'
+																			+ area.name
+																			+ '</option>');
+												}
+											}
+										});
+
+								initTableCheckbox();
+
+								$('#expressDialog').on('hidden.bs.modal',
+										function() {
+											location.reload();
+											//$('#expressForm').bootstrapValidator('resetForm', true);
+										});
+								$('#expressDialog').on('shown.bs.modal',
+										function() {
+											var expid = $('#expressForm input[name="id"]').val();
+											console.log(expid);
+											if(expid){
+												$.post('fetch.action', {'id':expid},
+														function(data) {
+															console.log(data);
+															$('#expressForm input[name="name"]').val(data.recipient.name);
+															$('#expressForm input[name="phoneNumber"]').val(data.recipient.phoneNumber);
+															$('#expressForm select[name="area"]').val(data.dest.code);
+															$('#expressForm input[name="status"]').val([data.status]);
+															$('#expressForm .input-group.date').datepicker(
+																	'update', new Date(data.arriveDate));
+														});
+											}
+											
+										});
+							});
 		</script>
 </body>
 </html>
