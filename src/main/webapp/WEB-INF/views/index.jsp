@@ -113,27 +113,6 @@ body {
 		</div>
 	</div>
 
-	<div class="modal fade" id="confirmDialog" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">快递管理系统</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">是否删除选中的快递？</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" onclick="removeExpress()">确定</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<div class="container">
 		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
@@ -326,7 +305,24 @@ body {
 				$('#expressDialog').modal('show');
 			}
 			function showConfirmDialog() {
-				$('#confirmDialog').modal('show');
+				//$('#confirmDialog').modal('show');
+				var html = '<div class="modal fade bootstrap-confirm" tabindex="-1" role="dialog" aria-hidden="true">';
+				html += '<div class="modal-dialog" role="document">';
+				html += '<div class="modal-content">';
+				html += '<div class="modal-header">';
+				html += '<h5 class="modal-title" id="exampleModalLabel"></h5>';
+				html += '</div>';
+				html += '<div class="modal-body"></div>';
+				html += '<div class="modal-footer">';
+				html += '<button type="button" class="btn btn-secondary cancel" data-dismiss="modal">关闭</button>';
+				html += '<button type="button" class="btn btn-primary confirm" onclick="removeExpress()">确定</button>';
+				html += '</div>';
+				html += '</div>';
+				html += '</div>';
+				html += '</div>';
+				
+				var $bootstrapConfirm = $(html);
+				$bootstrapConfirm.appendTo('body');
 			}
 			function createOrUpdateExpress() {
 				var $form = $('#expressForm');

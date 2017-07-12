@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,7 +51,7 @@ public class ExpressAction {
 	}
 
 	@RequestMapping("/createOrUpdate.action")
-	public @ResponseBody String createExpress(@RequestParam(value = "id", required = false) String id,
+	public @ResponseBody String createOrUpdateExpress(@RequestParam(value = "id", required = false) String id,
 			@RequestParam("name") String name, @RequestParam("phoneNumber") String phoneNumber,
 			@RequestParam("area") String areacode, @RequestParam("arriveDate") String arriveDate,
 			@RequestParam("status") int status) throws ParseException {
@@ -89,7 +90,7 @@ public class ExpressAction {
 			return "update";
 		}
 	}
-
+	
 	@RequestMapping("/remove.action")
 	public @ResponseBody String removeExpress(@RequestParam("ids[]") List<String> ids) {
 		ExpressCondition condition = new ExpressCondition();
