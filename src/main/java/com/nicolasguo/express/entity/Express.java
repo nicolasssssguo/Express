@@ -1,15 +1,12 @@
 package com.nicolasguo.express.entity;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "tb_express")
@@ -50,14 +47,9 @@ public class Express extends BaseEntityObject {
 
 	public void setStatus(int status) {
 		this.status = status;
-		if (this.status == 0) {
-			setSignTime(null);
-		} else if (this.status == 1) {
-			setSignTime(new Date());
-		}
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	public Date getArriveDate() {
 		return arriveDate;
 	}

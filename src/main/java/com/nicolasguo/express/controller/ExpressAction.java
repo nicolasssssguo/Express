@@ -1,15 +1,22 @@
 package com.nicolasguo.express.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +30,8 @@ import com.nicolasguo.express.entity.Page;
 import com.nicolasguo.express.service.AreaService;
 import com.nicolasguo.express.service.CustomerService;
 import com.nicolasguo.express.service.ExpressService;
+import com.nicolasguo.express.util.DateEditor;
+import com.nicolasguo.express.util.ExcelUtil;
 import com.nicolasguo.express.util.UUID;
 
 @Controller
@@ -38,23 +47,12 @@ public class ExpressAction {
 	@Resource(name = "customerService")
 	private CustomerService<Customer, String> customerService;
 
-	@RequestMapping("/index")
-	public @ResponseBody ModelAndView index(
-			@RequestParam(value = "pageNo", defaultValue = "1", required = false) int pageNo) {
-		Page<Express> pageEntity = new Page<Express>();
-		pageEntity.setPageNo(pageNo);
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("index");
-		mav.addObject("expressPage", expressService.findAll(pageEntity));
-		mav.addObject("action", "index");
-		return mav;
+	@InitBinder
+	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+		binder.registerCustomEditor(Date.class, new DateEditor());
 	}
 
-	@RequestMapping("/createOrUpdate.action")
-	public @ResponseBody String createOrUpdateExpress(@RequestParam(value = "id", required = false) String id,
-			@RequestParam("name") String name, @RequestParam("phoneNumber") String phoneNumber,
-			@RequestParam("area") String areacode, @RequestParam("arriveDate") String arriveDate,
-			@RequestParam("status") int status) throws ParseException {
+	private Customer retrieveRecipient(String phoneNumber, String name, String areacode) {
 		Area area = areaService.findAreaByProperty("code", areacode).get(0);
 		List<Customer> customerList = customerService.findCustomerByProperty("phoneNumber", phoneNumber);
 		Customer recipient = null;
@@ -69,28 +67,55 @@ public class ExpressAction {
 		} else {
 			recipient = customerList.get(0);
 		}
-		Express express = expressService.getExpress(id);
-		if(express == null){
-			express = new Express();
-			express.setId(UUID.generateUUID());
-			express.setCreateTime(new Date());
-		}
+		return recipient;
+	}
+
+	@RequestMapping("/create.action")
+	public @ResponseBody String createExpress(@RequestParam("name") String name,
+			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("area") String areacode,
+			@RequestParam("arriveDate") Date arriveDate, @RequestParam("status") int status) throws ParseException {
+		Area area = areaService.findAreaByProperty("code", areacode).get(0);
+		Customer recipient = retrieveRecipient(phoneNumber, name, areacode);
+		Express express = new Express();
+		express.setId(UUID.generateUUID());
+		express.setCreateTime(new Date());
 		express.setDest(area);
 		express.setRecipient(recipient);
+		if (status == 0) {
+			express.setSignTime(null);
+		} else if (status != express.getStatus()) {
+			express.setSignTime(new Date());
+		}
 		express.setStatus(status);
-		SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-		express.setArriveDate(format.parse(arriveDate));
-		
-		if(StringUtils.isEmpty(id)){
-			expressService.saveExpress(express);
-			return "create";
-		}else{
+		express.setArriveDate(arriveDate);
+		expressService.saveExpress(express);
+		return "create";
+	}
+
+	@RequestMapping("/update.action")
+	public @ResponseBody String updateExpress(@RequestParam("id") String id, @RequestParam("name") String name,
+			@RequestParam("phoneNumber") String phoneNumber, @RequestParam("area") String areacode,
+			@RequestParam("arriveDate") Date arriveDate, @RequestParam("status") int status) throws ParseException {
+		Area area = areaService.findAreaByProperty("code", areacode).get(0);
+		Customer recipient = retrieveRecipient(phoneNumber, name, areacode);
+		Express express = expressService.getExpress(id);
+		if (express != null) {
+			express.setDest(area);
+			express.setRecipient(recipient);
+			if (status == 0) {
+				express.setSignTime(null);
+			} else if (status != express.getStatus()) {
+				express.setSignTime(new Date());
+			}
+			express.setStatus(status);
+			express.setArriveDate(arriveDate);
 			express.setModifyTime(new Date());
 			expressService.updateExpress(express);
-			return "update";
+
 		}
+		return "update";
 	}
-	
+
 	@RequestMapping("/remove.action")
 	public @ResponseBody String removeExpress(@RequestParam("ids[]") List<String> ids) {
 		ExpressCondition condition = new ExpressCondition();
@@ -101,29 +126,27 @@ public class ExpressAction {
 	}
 
 	@RequestMapping("/search.action")
-	public ModelAndView searchExpress(@RequestParam(value = "startDate", required = false) String startDate,
-			@RequestParam(value = "endDate", required = false) String endDate,
-			@RequestParam("phoneNumber") String phoneNumber,
-			@RequestParam(value = "status", required = false) int status,
-			@RequestParam(value = "pageNo", defaultValue = "1", required = false) int pageNo) throws ParseException {
-		ExpressCondition expressCondition = new ExpressCondition();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-		if (StringUtils.isNotEmpty(startDate)) {
-			expressCondition.setStartDate(format.parse(startDate));
+	public ModelAndView searchExpress(@RequestParam(value = "startDate", required = false) Date startDate,
+			@RequestParam(value = "area", required = false) String area,
+			@RequestParam(value = "endDate", required = false) Date endDate,
+			@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+			@RequestParam(value = "status", required = false) Integer status,
+			@RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo) throws ParseException {
+		ExpressCondition eCondition = new ExpressCondition();
+		if (startDate != null) {
+			eCondition.setStartDate(startDate);
 		}
-		if (StringUtils.isNotEmpty(endDate)) {
-			expressCondition.setEndDate(format.parse(endDate));
+		if (endDate != null) {
+			eCondition.setEndDate(endDate);
 		}
-		List<Customer> customerList = customerService.findCustomerByProperty("phoneNumber", phoneNumber);
-		Customer recipient = (customerList.size() > 0) ? customerList.get(0) : null;
-		expressCondition.setRecipient(recipient);
-		expressCondition.setStatus(status);
+		eCondition.setEndingNumber(phoneNumber);
+		eCondition.setStatus(status);
+		eCondition.setArea(area);
 		Page<Express> pageEntity = new Page<Express>();
 		pageEntity.setPageNo(pageNo);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
-		mav.addObject("expressPage", expressService.findExpressByCondition(expressCondition, pageEntity));
-		mav.addObject("action", "search.action");
+		mav.addObject("expressPage", expressService.findExpressByCondition(eCondition, pageEntity));
 		return mav;
 	}
 
@@ -133,16 +156,63 @@ public class ExpressAction {
 	}
 
 	@RequestMapping("/sign.action")
-	public String signExpress(@RequestParam String id) {
-		Express express = expressService.getExpress(id);
-		express.setStatus(1);
-		expressService.updateExpress(express);
-		return "redirect:/express/index";
+	public @ResponseBody String signExpress(@RequestParam("ids[]") List<String> ids) {
+		ExpressCondition condition = new ExpressCondition();
+		condition.setIds(ids);
+		List<Express> signList = expressService.findExpressByCondition(condition);
+		signList.forEach(new Consumer<Express>() {
+			@Override
+			public void accept(Express express) {
+				if (express.getStatus() == 0) {
+					express.setStatus(1);
+					express.setSignTime(new Date());
+					expressService.updateExpress(express);
+				}
+			}
+		});
+		return "success";
 	}
 
-	@RequestMapping("/fetch.action")
-	public @ResponseBody Express fetchExpress(@RequestParam String id) {
+	@RequestMapping("/retrieve.action")
+	public @ResponseBody Express retrieveExpress(@RequestParam String id) {
 		Express express = expressService.getExpress(id);
 		return express;
+	}
+
+	@RequestMapping("/export.action")
+	public void exportExpress(HttpServletResponse response) throws IOException {
+		ExpressCondition condition = new ExpressCondition();
+		condition.setStartDate(new Date());
+		condition.setEndDate(new Date());
+		List<Express> expressList = expressService.findExpressByCondition(condition);
+		List<Map<String, Object>> list = createExcelRecord(expressList);
+		String[] columnNames = new String[] { "序号", "姓名", "地址", "手机号码", "状态" };
+		String keys[] = new String[] { "rownum", "name", "dest", "phoneNumber", "status" };
+		response.reset();
+		response.setContentType("application/vnd.ms-excel;charset=utf-8");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		response.setHeader("Content-Disposition",
+				"attachment;filename=" + new String((format.format(new Date()) + ".xls").getBytes(), "iso-8859-1"));
+		ExcelUtil.createWorkBook(list, columnNames, keys).write(response.getOutputStream());
+	}
+
+	private List<Map<String, Object>> createExcelRecord(List<Express> expressList) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("sheetName", format.format(new Date()));
+		listmap.add(map);
+		Express express = null;
+		for (int cnt = 0; cnt < expressList.size(); cnt++) {
+			express = expressList.get(cnt);
+			Map<String, Object> mapValue = new HashMap<String, Object>();
+			mapValue.put("rownum", cnt + 1);
+			mapValue.put("name", express.getRecipient().getName());
+			mapValue.put("dest", express.getDest().getName());
+			mapValue.put("phoneNumber", express.getRecipient().getPhoneNumber());
+			mapValue.put("status", express.getStatus() == 1 ? "已签收" : "未签收");
+			listmap.add(mapValue);
+		}
+		return listmap;
 	}
 }

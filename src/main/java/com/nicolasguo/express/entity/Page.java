@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Page<T> {
 
-	public static final int DEFAULT_PAGE_SIZE = 6;
+	public static final int DEFAULT_PAGE_SIZE = 10;
 	
 	// 结果集
 	private List<T> list;

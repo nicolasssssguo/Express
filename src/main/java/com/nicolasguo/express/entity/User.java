@@ -3,9 +3,6 @@ package com.nicolasguo.express.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.nicolasguo.express.common.ProjectConfig;
 
 @Entity
 @Table(name = "tb_user")
@@ -18,8 +15,6 @@ public class User extends BaseEntityObject {
 	private String loginName;
 
 	private String password;
-
-	private boolean enabled;
 
 	@Column(length=255)
 	public String getLoginName() {
@@ -46,25 +41,5 @@ public class User extends BaseEntityObject {
 	
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	@Transient
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Transient
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Transient
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Transient
-	public boolean isEnabled() {
-		return enabled;
 	}
 }

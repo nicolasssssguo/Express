@@ -1,5 +1,7 @@
 package com.nicolasguo.express.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.nicolasguo.express.entity.User;
 
 public class LoginInterceptor implements HandlerInterceptor {
+	
+	private List<String> excludedUrls;
+
+	public void setExcludedUrls(List<String> excludedUrls) {
+		this.excludedUrls = excludedUrls;
+	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
@@ -23,10 +31,16 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		String requestUri = request.getRequestURI();
+		for (String url : excludedUrls) {
+			if (requestUri.endsWith(url)) {
+				return true;
+			}
+		}
 		
 		HttpSession session = request.getSession();
-		User loginUser = (User) session.getAttribute("loginuser");
-		if(loginUser == null){
+		User loginUser = (User) session.getAttribute("LOGIN_USER");
+		if(loginUser != null){
 			return true;
 		}
 		request.getRequestDispatcher("/login.jsp").forward(request, response);

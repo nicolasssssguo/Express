@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.nicolasguo.express.condition.impl.CustomerCondition;
 import com.nicolasguo.express.dao.IBaseEntityDao;
 import com.nicolasguo.express.entity.Customer;
+import com.nicolasguo.express.entity.Page;
 import com.nicolasguo.express.service.CustomerService;
 
 @Service("customerService")
@@ -36,6 +37,11 @@ public class CustomerServiceImpl implements CustomerService<Customer, String> {
 	public List<Customer> findCustomerByCondition(CustomerCondition condition) {
 		return customerDao.findByCondition(condition);
 	}
+	
+	@Override
+	public Page<Customer> findCustomerByCondition(CustomerCondition condition, Page<Customer> page) {
+		return customerDao.findByCondition(condition, page);
+	}
 
 	@Override
 	public void updateCustomer(Customer entity) {
@@ -56,5 +62,4 @@ public class CustomerServiceImpl implements CustomerService<Customer, String> {
 	public void deleteCustomers(List<Customer> list) {
 		customerDao.deleteEntitys(list);
 	}
-
 }

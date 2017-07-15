@@ -10,6 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <title>快递信息管理系统</title>
+<link rel="shortcut icon" href="<%=basePath%>resources/images/favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrap.min.css" />
 <link rel="stylesheet" href="<%=basePath %>resources/css/bootstrapValidator.min.css" />
 <script src="<%=basePath %>resources/js/jquery-1.12.4.min.js"></script>
@@ -27,30 +28,28 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 }
 </style>
 </head>
-<body class="bg-info vertical-center">
+<body class="vertical-center">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-default panel-login">
-					<div class="text-center">
-						<img src="<%=basePath %>resources/images/logo.png" />
-					</div><!-- end of panel-heading -->
+					<div class="panel-heading">
+						<div class="text-center">
+						<img src="<%=basePath %>resources/images/logo.svg" width="100" height="100" />
+					</div>
+					</div>
+					<!-- end of panel-heading -->
 					<div class="panel-body">
 						<form role="form" id="loginForm" action="${pageContext.request.contextPath}/user/login.action" method="POST">
 							<!-- username field -->
 							<div class="form-group">
 								<label for="username">用户名:</label>
-								<input type="text" name="username" class="form-control" id="username" placeholder="" />
+								<input type="text" name="username" class="form-control" id="username" value="admin" />
 							</div>
 							<!-- password field -->
 							<div class="form-group">
 								<label for="password">密码:</label>
-								<input type="password" name="password" class="form-control" id="password" placeholder="" />
-							</div>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="rememberme">记住密码
-								</label>
+								<input type="password" name="password" class="form-control" id="password" value="admin" />
 							</div>
 							<div class="form-group">
 								<button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
@@ -63,13 +62,22 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 	</div>
 	<script>
 		$(document).ready(function() {
+			var $form = $('#loginForm');
 		    $('#loginForm').bootstrapValidator({
-		        message: 'This value is not valid',
-		        feedbackIcons: {
-		            valid: 'glyphicon glyphicon-ok',
-		            invalid: 'glyphicon glyphicon-remove',
-		            validating: 'glyphicon glyphicon-refresh'
-		        },
+		    	submitHandler: function(validator, form, submitButton){
+		    	    var bv = $form.data('bootstrapValidator');
+
+		    	    $.post($form.attr('action'), $form.serialize())
+		    	    .success( function(msg) { 
+		    	    	if('success' == msg){
+		    	    		window.location.href = '${pageContext.request.contextPath}/index';
+		    	    	}else if('fail' == msg){
+			    	    	bv.updateStatus('password','INVALID','callback');
+		    	    	}
+		    	     })
+		    	    .fail( function(xhr, status, error) {
+		    	    });
+		    	},	    	
 		        fields: {
 		        	username: {
 		                validators: {
@@ -90,7 +98,10 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 		            password: {
 		                validators: {
 		                    notEmpty: {
-		                        message: 'The password is required'
+		                        message: '密码不能为空'
+		                    },
+		                    callback: {
+		                    	message:'用户名或密码错误'
 		                    }
 		                }
 		            }
@@ -100,3 +111,6 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 	</script>
 </body>
 </html>
+<%
+	session.invalidate();
+%>

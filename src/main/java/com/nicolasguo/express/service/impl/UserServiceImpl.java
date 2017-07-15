@@ -19,38 +19,42 @@ public class UserServiceImpl implements UserService<User, String> {
 	
 	@Override
 	public User getUser(String id) {
-		return null;
+		return userDao.get(id);
 	}
 
 	@Override
 	public User loadUser(String id) {
-		return null;
+		return userDao.load(id);
 	}
 
 	@Override
 	public void updateUser(User entity) {
+		userDao.update(entity);
 	}
 
 	@Override
 	public void saveUser(User entity) {
+		userDao.save(entity);
 	}
 
 	@Override
 	public void deleteUser(User entity) {
+		userDao.delete(entity);
 	}
 
 	@Override
 	public void deleteUsers(List<User> list) {
+		userDao.deleteEntitys(list);
 	}
 
 	@Override
 	public List<User> findUserByProperty(String propertyName, String propertyValue) {
-		return null;
+		return userDao.findByProperty(propertyName, propertyValue);
 	}
 
 	@Override
 	public List<User> findUserByCondition(UserCondition condition) {
-		return null;
+		return userDao.findByCondition(condition);
 	}
 
 }
