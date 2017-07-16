@@ -167,7 +167,7 @@ body {
 					<div class="col-md-4 col-md-offset-4">
 						<div class="text-right">
 							<a href="${pageContext.request.contextPath}/express/export.action" class="btn btn-primary">
-								<span class="glyphicon glyphicon-export"></span> 导出今日快递
+								<span class="glyphicon glyphicon-export"></span> 导出
 							</a>
 						</div>
 					</div>

@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -131,22 +132,24 @@ public class ExpressAction {
 			@RequestParam(value = "endDate", required = false) Date endDate,
 			@RequestParam(value = "phoneNumber", required = false) String phoneNumber,
 			@RequestParam(value = "status", required = false) Integer status,
-			@RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo) throws ParseException {
-		ExpressCondition eCondition = new ExpressCondition();
+			@RequestParam(value = "pageNo", required = false, defaultValue = "1") int pageNo, HttpSession session) throws ParseException {
+		ExpressCondition condition = new ExpressCondition();
 		if (startDate != null) {
-			eCondition.setStartDate(startDate);
+			condition.setStartDate(startDate);
 		}
 		if (endDate != null) {
-			eCondition.setEndDate(endDate);
+			condition.setEndDate(endDate);
 		}
-		eCondition.setEndingNumber(phoneNumber);
-		eCondition.setStatus(status);
-		eCondition.setArea(area);
+		condition.setEndingNumber(phoneNumber);
+		condition.setStatus(status);
+		condition.setArea(area);
+		session.setAttribute("expressCondition", condition);
 		Page<Express> pageEntity = new Page<Express>();
 		pageEntity.setPageNo(pageNo);
+		pageEntity = expressService.findExpressByCondition(condition, pageEntity);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
-		mav.addObject("expressPage", expressService.findExpressByCondition(eCondition, pageEntity));
+		mav.addObject("expressPage", pageEntity);
 		return mav;
 	}
 
@@ -180,10 +183,8 @@ public class ExpressAction {
 	}
 
 	@RequestMapping("/export.action")
-	public void exportExpress(HttpServletResponse response) throws IOException {
-		ExpressCondition condition = new ExpressCondition();
-		condition.setStartDate(new Date());
-		condition.setEndDate(new Date());
+	public void exportExpress(HttpServletResponse response, HttpSession session) throws IOException {
+		ExpressCondition condition = (ExpressCondition) session.getAttribute("expressCondition");
 		List<Express> expressList = expressService.findExpressByCondition(condition);
 		List<Map<String, Object>> list = createExcelRecord(expressList);
 		String[] columnNames = new String[] { "序号", "姓名", "地址", "手机号码", "状态" };
@@ -192,7 +193,7 @@ public class ExpressAction {
 		response.setContentType("application/vnd.ms-excel;charset=utf-8");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		response.setHeader("Content-Disposition",
-				"attachment;filename=" + new String((format.format(new Date()) + ".xls").getBytes(), "iso-8859-1"));
+				"attachment;filename=" + new String((format.format(new Date()) + "_导出.xls").getBytes(), "iso-8859-1"));
 		ExcelUtil.createWorkBook(list, columnNames, keys).write(response.getOutputStream());
 	}
 

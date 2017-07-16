@@ -44,12 +44,12 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 							<!-- username field -->
 							<div class="form-group">
 								<label for="username">用户名:</label>
-								<input type="text" name="username" class="form-control" id="username" value="admin" />
+								<input type="text" name="username" class="form-control" id="username" value="" />
 							</div>
 							<!-- password field -->
 							<div class="form-group">
 								<label for="password">密码:</label>
-								<input type="password" name="password" class="form-control" id="password" value="admin" />
+								<input type="password" name="password" class="form-control" id="password" value="" />
 							</div>
 							<div class="form-group">
 								<button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
